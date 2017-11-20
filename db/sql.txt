@@ -1,0 +1,82 @@
+
+//Alla passeringar
+SELECT 
+	checkpoints.timepassed, results.race, results.year, checkpoints.name, results.class, results.stage
+FROM 
+	checkpoints INNER JOIN results 
+ON
+	checkpoints.results_id = results.id
+WHERE
+	checkpoints.name = "Hållfjället" AND 
+	results.year = 2017 AND
+	results.race = "Fjällmaraton";
+
+//Alla lagrade lopp
+SELECT DISTINCT race, year FROM results
+
+SELECT DISTINCT race, year, class FROM results
+
+
+SELECT race, year, class, COUNT(*) FROM results GROUP BY race, year, class;
+
+SELECT race, year, class, status, COUNT(*) FROM results GROUP BY race, year, class, status;
+
+
+Select COUNT(*) FROM checkpoints INNER JOIN results 
+ON checkpoints.results_id = results.id
+WHERE
+	checkpoints.name = "Hållfjället" AND 
+	results.year = 2017 AND
+	results.race = "Fjällmaraton";
+	checkpoints.name 
+
+Klasser Bydalen
+----------
+Herrar 50K
+Damer 50K
+Herrar 22K
+Damer 22K
+----------
+
+Klasser 27K
+----------
+Herrar
+Damer
+----------
+
+Klasser Fjällmaraton (Solo/DUO)
+----------
+Herrar Solo
+Damer Solo
+Herrar Duo
+Damer Duo
+Mix Duo
+----------
+
+SELECT
+    SEC_TO_TIME(TIME_TO_SEC(timepassed)/(300)*300) AS timekey,
+    name,
+    firstname,
+    surname,
+    count(*)
+FROM checkpoints c INNER JOIN results r
+ON c.results_id = r.id
+WHERE
+	c.name = "Hållfjället" AND 
+	r.year = 2017 AND
+	r.race = "Fjällmaraton" AND 
+	timepassed BETWEEN '01:30:00' AND '05:30:00'
+GROUP BY 
+	TIME_TO_SEC(timepassed) DIV 300, name;
+
+
+
+
+SELECT
+*
+FROM checkpoints c INNER JOIN results r
+ON c.results_id = r.id
+WHERE
+	c.name = "Hållfjället" AND 
+	r.year = 2017 AND
+	r.race = "Fjällmaraton";
