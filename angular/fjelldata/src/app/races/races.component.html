@@ -1,0 +1,16 @@
+
+<!--<div>
+    <label>name:
+      <input [(ngModel)]="race1.name" placeholder="name">
+    </label>
+</div>-->
+
+<h2>My Races</h2>
+<ul class="races">
+
+<li *ngFor="let race of races" (click)="onSelect(race)" [class.selected]="race === selectedRace">
+  <span class="badge">{{race.id}}</span> {{race.name}} - {{race.year}}
+</li>
+</ul>
+
+<app-race-detail [race]="selectedRace"></app-race-detail>

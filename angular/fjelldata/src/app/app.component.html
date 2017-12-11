@@ -1,0 +1,50 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<img id="logo" [src]="'/assets/fjallstatistik.png'" alt="Simpla Admin logo" />
+<nav>
+  <ul class="nav">
+    <li><a routerLink="/chart">home</a></li>
+    <li class="sponsor-fjallmara"><a routerLink="/race/fjallmara">Fjällmaraton</a></li>
+    <li class="sponsor-27k"><a routerLink="/race/27k">Salomon 27K</a></li>
+    <li><a routerLink="/race/valliste-runt">Välliste Runt</a></li>
+    <li class="sponsor-vertical"><a routerLink="/race/verticalk">Vertical K</a></li>
+    <li class="sponsor-copper"><a routerLink="/race/copper-traik">Copper Trail</a></li>
+    <li class="sponsor-kvartsmara"><a routerLink="/race/kvartsmaraton">kvartsmaraton</a></li>
+    <li class="sponsor-oppet"><a routerLink="/race/oppet-fjall">Öppet fjäll</a></li>
+    <li class="sponsor-bydalen"><a routerLink="/race/Bydalsfjallen">Bydalsfjällen</a></li>
+  </ul>
+
+<br /><br />
+  <ul class="nav">
+    <li *ngFor="let race of races" (click)="onSelect(race)" [class.selected]="race === selectedRace" class="race">
+      <span class="badge">{{race.id}}</span> {{race.name}} - {{race.year}}
+    </li>
+  </ul>
+</nav>
+<router-outlet></router-outlet>
+
+<!--
+<app-chart></app-chart>
+
+<div style="text-align:left">
+  <h1>
+    {{title}}
+  </h1>
+  <div class="floating-box">
+    <app-races></app-races>
+  </div>
+  <div class="floating-box">
+    <app-messages></app-messages>
+  </div>
+</div>
+<h2>Here are some links to help you start: </h2>
+<ul>
+  <li>
+    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
+  </li>
+  <li>
+    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
+  </li>
+  <li>
+    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
+  </li>
+</ul>-->

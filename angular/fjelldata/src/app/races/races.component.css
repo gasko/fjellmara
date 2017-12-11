@@ -1,0 +1,152 @@
+/* HeroesComponent's private CSS styles */
+
+.selected {
+  background-color: #CFD8DC !important;
+  color: white;
+}
+
+ul.nav {
+    list-style-type: none !important;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+ul.nav  {
+  transition: all 0.1s;
+}
+
+.nav li {
+    float: left;
+    border: 0;
+    text-transform: uppercase;
+}
+
+.nav li:last-child {
+    border-right: none;
+}
+.nav li.sponsor-fjallmara a {
+    background-image: url('/assets/kia_neg.png') !important;
+    background-size: 2.5em !important;
+    background-repeat: no-repeat !important;
+    background-position: 0.3em center !important;
+    padding-left: 3.25em;
+}
+.nav li.sponsor-27k a {
+    background-image: url('/assets/Salomon_27K_logo_white.png') !important;
+    background-repeat: no-repeat !important;
+    padding-left: 3.25em;
+    background-size: 2em !important;
+    background-position: 0.8em !important;
+    padding-left: 3.5em;
+}
+.nav li.sponsor-vertical a {
+    background-image: url('/assets/ppverticalk_neg.svg') !important;
+    background-repeat: no-repeat !important;
+    padding-left: 3.25em;
+    background-size: 2em !important;
+    background-position: 0.8em !important;
+    padding-left: 3.5em;
+}
+.nav li.sponsor-copper a {
+    background-image: url('/assets/copperhill_neg.png') !important;
+    background-repeat: no-repeat !important;
+    padding-left: 3.25em;
+    background-size: 2em !important;
+    background-position: 0.8em !important;
+    padding-left: 3.5em;
+}
+.nav li.sponsor-kvartsmara a {
+    background-image: url('/assets/ulvang.png') !important;
+    background-repeat: no-repeat !important;
+    padding-left: 3.25em;
+    background-size: 2em !important;
+    background-position: 0.8em !important;
+    padding-left: 3.5em;
+}
+.nav li.sponsor-oppet a {
+    background-image: url('/assets/lundhags_neg.png') !important;
+    background-repeat: no-repeat !important;
+    padding-left: 3.25em;
+    background-size: 3.5em !important;
+    background-position: 0.1em !important;
+    padding-left: 3.5em;
+}
+.nav li.sponsor-bydalen {
+    background-image: url('/assets/buff_neg.png') !important;
+    background-repeat: no-repeat !important;
+    padding-left: 3.25em;
+    background-size: 2em !important;
+    background-position: 0.8em !important;
+    padding-left: 3.5em;
+}
+
+.nav li {
+    display: block;
+    border: 1px solid rgba(255,255,255,0.8);
+    border-radius: 3px;
+    color: white;
+    text-align: center;
+    margin: 0.1em 0.1em;
+    padding: 1em 1em;
+    font-size: 0.6em;
+    color: rgb(255,255,255);
+    background-color: #222;
+    text-decoration: none;
+}
+
+.nav li a:hover:not(.active) {
+    background-color: #444;
+    border: 1px solid rgba(255,255,255,0.8);
+}
+
+.nav .active {
+    background-color: #4CAF50;
+}
+
+
+.races {
+  margin: 0 0 2em 0;
+  list-style-type: none;
+  padding: 0;
+  width: 20em;
+}
+
+.races li {
+  cursor: pointer;
+  position: relative;
+  left: 0;
+  background-color: rgb(196, 20, 20);
+  color: white;
+  margin: .5em;
+  padding: .3em 0;
+  height: 1.6em;
+  border-radius: 4px;
+}
+.races li.selected:hover {
+  background-color: #BBD8DC !important;
+  color: white;
+}
+.races li:hover {
+  color: #607D8B;
+  background-color: #DDD;
+  left: .1em;
+}
+.heroes .text {
+  position: relative;
+  top: -3px;
+}
+.races .badge {
+  display: inline-block;
+  font-size: small;
+  color: white;
+  padding: 0.8em 0.7em 0 0.7em;
+  background-color: #607D8B;
+  line-height: 1em;
+  position: relative;
+  left: -1px;
+  top: -4px;
+  height: 1.8em;
+  margin-right: .8em;
+  border-radius: 4px 0 0 4px;
+}

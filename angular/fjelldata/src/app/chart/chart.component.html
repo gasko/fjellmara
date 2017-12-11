@@ -1,0 +1,23 @@
+<h2>My passings</h2>
+
+<div style="width: 100%;">
+  <canvas
+      baseChart
+      [chartType]="'line'"
+      [datasets]="chartData"
+      [labels]="chartLabels"
+      [options]="chartOptions"
+      [legend]="true"
+      (chartClick)="onChartClick($event)">
+  </canvas>
+</div>
+
+<canvas id="myChart" class="chart"></canvas>
+
+
+<ul>
+  <li *ngFor="let passing of passings">
+    <span class="badge">{{passing.time}}</span> {{passing.count}}
+  </li>
+
+</ul>

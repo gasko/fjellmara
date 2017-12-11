@@ -1,5 +1,7 @@
+#####################################
+### Alla passeringar
+#####################################
 
-//Alla passeringar
 SELECT 
 	checkpoints.timepassed, results.race, results.year, checkpoints.name, results.class, results.stage
 FROM 
@@ -11,7 +13,9 @@ WHERE
 	results.year = 2017 AND
 	results.race = "Fjällmaraton";
 
-//Alla lagrade lopp
+#####################################
+### Alla lagrade lopp
+#####################################
 SELECT DISTINCT race, year FROM results
 
 SELECT DISTINCT race, year, class FROM results
@@ -29,6 +33,22 @@ WHERE
 	results.year = 2017 AND
 	results.race = "Fjällmaraton";
 	checkpoints.name 
+
+
+###################################
+## checkpoints
+##########################
+Select c.name, c.distance FROM checkpoints c INNER JOIN results r
+ON c.results_id = r.id
+WHERE 
+	r.year = 2017 AND
+	r.race = "Fjällmaraton"
+ORDER BY c.distance
+GROUP BY c.distance
+	 
+
+
+
 
 Klasser Bydalen
 ----------
@@ -56,8 +76,8 @@ Mix Duo
 SELECT
     SEC_TO_TIME(TIME_TO_SEC(timepassed)/(300)*300) AS timekey,
     name,
-    firstname,
-    surname,
+    -- firstname,
+    -- surname,
     count(*)
 FROM checkpoints c INNER JOIN results r
 ON c.results_id = r.id
@@ -70,6 +90,194 @@ GROUP BY
 	TIME_TO_SEC(timepassed) DIV 300, name;
 
 
+Hållfjället
+SELECT DATE_FORMAT(SEC_TO_TIME(ROUND(TIME_TO_SEC(timepassed) DIV 300)*300), '%I:%i')
+    AS timekey, count(*)
+    FROM checkpoints c INNER JOIN results r
+    ON c.results_id = r.id
+    WHERE
+	   c.name = 'Hållfjället' AND
+     r.year = 2015 AND
+     r.race = 'Fjällmaraton' AND
+     timepassed BETWEEN '01:30:00' AND '05:30:00'
+    GROUP BY TIME_TO_SEC(timepassed) DIV 300, name;
+
+
+#####################################
+### Medeltid
+#####################################
+SELECT DATE_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(`timepassed`))), '%I:%i') 
+FROM checkpoints c INNER JOIN results r
+    ON c.results_id = r.id
+    WHERE
+	   c.name = 'Hållfjället' AND
+     r.year = 2015 AND
+     r.race = 'Fjällmaraton';
+
+#####################################
+### Mediantid
+#####################################
+SET @rank=0;
+SELECT @rank:=@rank+1 AS rank, c.timepassed, COUNT(*) as ordercount
+FROM checkpoints c INNER JOIN results r
+    ON c.results_id = r.id
+    WHERE
+	   c.name = 'Hållfjället' AND
+     r.year = 2015 AND
+     r.race = 'Fjällmaraton'
+ GROUP BY timepassed 
+  ORDER BY timepassed;
+
+GROUP BY itemID
+
+
+
+
+SELECT 
+TIME_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(c.timpassed))),'%H:%i') AS medianTime
+FROM 
+(
+    SELECT 
+        TIME(c.timepassed) only_time,
+        @rn := @rn + 1 AS row_number
+    FROM checkpoints c INNER JOIN results r
+    ON c.results_id = r.id
+    WHERE
+	   c.name = 'Hållfjället' AND
+     r.year = 2015 AND
+     r.race = 'Fjällmaraton'
+    CROSS JOIN (SELECT @rn := 0) var
+    WHERE 
+        DATE_FORMAT(DATE(date_time), '%d-%m-%Y') = DATE_FORMAT('2016-08-09', '%d-%m-%Y')    AND 
+        login_successful = 1
+    ORDER BY only_time
+) AS timeTable
+
+CROSS JOIN 
+(
+    SELECT 
+        COUNT(*) total_rows
+    FROM 
+        login_attempts 
+    WHERE 
+        DATE_FORMAT(DATE(date_time), '%d-%m-%Y') = DATE_FORMAT('2016-08-09', '%d-%m-%Y') AND 
+        login_successful = 1
+) AS t
+WHERE timeTable.row_number IN ( floor((total_rows+1)/2), floor((total_rows+2)/2))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+####################################
+
+
+
+select @counter:=@counter+1 as 'Row', test_val
+from test100, (select @counter:=0) r
+order by 2
+
+SELECT c.timepassed, 
+       @rownum := @rownum + 1 AS rank
+  FROM checkpoints c INNER JOIN results r
+    ON c.results_id = r.id
+    WHERE
+	   c.name = 'Hållfjället' AND
+     r.year = 2015 AND,
+     r.race = 'Fjällmaraton';
+
+
+       (SELECT @rownum := 0) r
+
+
+
+SELECT timepassed FROM checkpoints c INNER JOIN results r
+    ON c.results_id = r.id
+    WHERE
+	   c.name = 'Hållfjället' AND
+     r.year = 2015 AND
+     r.race = 'Fjällmaraton'
+GROUP BY timepassed
+HAVING SUM(SIGN(1-SIGN(y.val-x.val))) = (COUNT(*)
++1)/2
+
+
+TIME_TO_SEC(`timepassed`)
+
+SELECT avg(t1.timepassed) as median_val FROM (
+SELECT @rownum:=@rownum+1 as 'row_number', c.timepassed
+  FROM checkpoints c INNER JOIN results res
+    ON c.results_id = res.id
+    WHERE
+	c.name = 'Hållfjället' AND
+     res.year = 2015 AND
+     res.race = 'Fjällmaraton'
+  ORDER BY timepassed
+) as t1, 
+(
+  SELECT count(*) as total_rows
+  FROM checkpoints c INNER JOIN results res
+    ON c.results_id = res.id
+    WHERE
+	   c.name = 'Hållfjället' AND
+     res.year = 2015 AND
+     res.race = 'Fjällmaraton'
+) as t2
+WHERE 1
+AND t1.row_number in ( floor((total_rows+1)/2), floor((total_rows+2)/2) );
+
+
+select 
+    date_format(
+        adddate('01:30', @num:=@num+1), 
+        '%I:%i'
+    ) date
+from 
+    results,    
+    (select @num:=-1) num
+limit 
+    40
+
+
+
+
+SELECT series.minute as interval,  coalesce(cnt.count,0) as count from 
+       (
+SELECT DATE_FORMAT(SEC_TO_TIME(ROUND(TIME_TO_SEC(timepassed) DIV 300)*300), '%k:%i')
+    AS timekey, count(*)
+    FROM checkpoints c INNER JOIN results r
+    ON c.results_id = r.id
+    WHERE
+	c.name = 'Hållfjället' AND
+	r.year = 2017 AND	
+	r.race = 'Fjällmaraton' AND
+     timepassed BETWEEN '01:30:00' AND '05:30:00'
+    GROUP BY TIME_TO_SEC(timepassed) DIV 300, name;
+       ) cnt
+    RIGHT JOIN 
+       (    
+       SELECT generate_series(min(date_trunc('hour',timestamp_column)),
+       max(date_trunc('minute',timestamp_column)),'5m') as minute from TABLE_NAME 
+       ) series
+
+  on series.minute = cnt.interval_alias
+
+
+
 
 
 SELECT
@@ -80,3 +288,17 @@ WHERE
 	c.name = "Hållfjället" AND 
 	r.year = 2017 AND
 	r.race = "Fjällmaraton";
+
+
+
+
+select @counter:=@counter+1 as 'Row', time
+from results, (select @counter:=0) r
+order by 2
+
+
+
+SELECT t.time, 
+       @rownum := @rownum + 1 AS rank
+  FROM RESULTS t, 
+       (SELECT @rownum := 0) r
