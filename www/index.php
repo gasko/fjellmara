@@ -42,7 +42,7 @@ try {
      timepassed BETWEEN '01:30:00' AND '05:30:00'
     GROUP BY TIME_TO_SEC(timepassed) DIV 300, name"
     */
-    $sql = "SELECT id, firstname, surname FROM results"
+    $sql = "SELECT id, firstname, surname FROM results";
 
     $stmt = $conn->prepare($sql);
     $stmt->execute();

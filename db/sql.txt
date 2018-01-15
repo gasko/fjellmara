@@ -43,9 +43,16 @@ ON c.results_id = r.id
 WHERE 
 	r.year = 2017 AND
 	r.race = "Fjällmaraton"
-ORDER BY c.distance
 GROUP BY c.distance
+ORDER BY c.distance
 	 
+Select c.name, c.distance FROM checkpoints c INNER JOIN results r
+ON c.results_id = r.id
+WHERE 
+	r.year = 2017 AND
+	r.race = "27K"
+GROUP BY c.distance
+ORDER BY c.distance
 
 
 
@@ -107,6 +114,31 @@ SELECT DATE_FORMAT(SEC_TO_TIME(ROUND(TIME_TO_SEC(timepassed) DIV 300)*300), '%I:
 ### Medeltid
 #####################################
 SELECT DATE_FORMAT(SEC_TO_TIME(AVG(TIME_TO_SEC(`timepassed`))), '%I:%i') 
+FROM checkpoints c INNER JOIN results r
+    ON c.results_id = r.id
+    WHERE
+	c.name = 'Hållfjället' AND
+     r.year = 2015 AND
+     r.race = 'Fjällmaraton';
+
+SELECT timepassed 
+FROM checkpoints c INNER JOIN results r
+    ON c.results_id = r.id
+    WHERE
+	
+
+SELECT DATE_FORMAT(SEC_TO_TIME(ROUND(TIME_TO_SEC(timepassed) DIV 300)*300), '%I:%i')
+        AS time, count(*) AS count
+        FROM checkpoints c INNER JOIN results r
+        ON c.results_id = r.id
+        WHERE
+c.name = 'Hållfjället' AND
+     r.year = 2017 AND
+     r.race = 'Fjällmaraton'
+        GROUP BY TIME_TO_SEC(timepassed) DIV 300, name ;
+
+
+SELECT DATE_FORMAT(SEC_TO_TIME(STDDEV(TIME_TO_SEC(`timepassed`))), '%I:%i') 
 FROM checkpoints c INNER JOIN results r
     ON c.results_id = r.id
     WHERE

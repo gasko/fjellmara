@@ -1,9 +1,9 @@
 import { Race } from './race';
 
 export const RACES: Race[] = [
-  { id: 1, name: 'Fjällmaraton', year: 2017 },
-  { id: 2, name: 'BUFF Bydalen 50K', year: 2017 },
-  { id: 13, name: 'KIA Fjällmaradon', year: 2016  }
+  { name: 'Fjällmaraton', year: 2017 },
+  { name: 'BUFF Bydalen 50K', year: 2017 },
+  { name: 'KIA Fjällmaradon', year: 2016  }
 ];
 
 export const CHECKPOINTS_FJALLMARA: Checkpoint[] = [

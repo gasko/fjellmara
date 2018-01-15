@@ -5,8 +5,8 @@ import { RaceComponent }  from './race/race.component';
 import { ChartComponent } from './chart/chart.component';
 
 const routes: Routes = [
-  { path: 'races', component: RacesComponent }
-  { path: 'chart', component: ChartComponent }
+  { path: 'races', component: RacesComponent },
+  { path: 'chart', component: ChartComponent },
   { path: 'race/:alias', component: RaceComponent }
 ];
 
