@@ -15,16 +15,15 @@
       [labels]="chartLabels"
       [options]="chartOptions"
       [legend]="true"
+      [colors]="lineChartColors"
       (chartClick)="onChartClick($event)">
   </canvas>
 </div>
-
-<!--<canvas id="myChart" class="chart"></canvas>-->
-
-
+<!--
 <ul>
   <li *ngFor="let passing of passings">
     <span class="badge">{{passing.time}}</span> {{passing.count}}
   </li>
 
 </ul>
+-->

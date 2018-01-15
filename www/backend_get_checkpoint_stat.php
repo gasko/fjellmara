@@ -136,6 +136,20 @@ function get_slowest_time($conn, $race, $checkpoint){
   return $r["maxtime"];
 }
 
+function get_numberofraces($conn, $race, $checkpoint) {
+  $query =
+    " SELECT count(DISTINCT r.year) AS numberofraces
+          FROM checkpoints c INNER JOIN results r
+          ON c.results_id = r.id
+          WHERE
+          c.name = '{$checkpoint}' AND
+          r.race = '{$race}'";
+
+  $sth = mysqli_query($conn, $query);
+  $r = mysqli_fetch_assoc($sth);
+  return $r["numberofraces"];
+}
+
 function echo_all($conn, $race, $checkpoint){
   echo "all runners: ";
   echo get_allpass($conn, $race, $checkpoint);
@@ -160,6 +174,9 @@ function echo_all($conn, $race, $checkpoint){
   echo "\n";
   echo sec2time(get_avgtime($conn, $race, $checkpoint));
 
+  echo "numberofraces: ";
+  echo get_numberofraces($conn, $race, $checkpoint);
+  echo "\n";
 }
 
 /**
@@ -169,6 +186,7 @@ $stddev = get_stddev($conn, $race, $checkpoint);
 $avgtime = get_avgtime($conn, $race, $checkpoint);
 $fastesttime = get_fastest_time($conn, $race, $checkpoint);
 $slowesttime = get_slowest_time($conn, $race, $checkpoint);
+$numberofraces = get_numberofraces($conn, $race, $checkpoint);
 $jsonret = array(
   'tot_runners' => get_allpass($conn, $race, $checkpoint),
   'fastest_time' => sec2time($fastesttime),
@@ -179,6 +197,7 @@ $jsonret = array(
   'stddev_sec' => $stddev,
   'avgtime' => sec2time($avgtime),
   'avgtime_sec' => $avgtime,
+  'numberofraces' => $numberofraces,
   'passings' => get_passings($conn, $race, $checkpoint, $time_in_sec)
 );
 

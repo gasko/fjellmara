@@ -15,10 +15,37 @@ export class ChartComponent implements OnInit, AfterViewInit {
   canvas: any;
   ctx: any;
   passings: Passing[];
-  const labelminutes:number = 5;
+  labelminutes:number = 5;
   dataPassings : number[] = [];
   dataNormal: number[] = [];
   ret:number[] = [];
+
+  public lineChartColors:Array<any> = [
+    { // grey
+      backgroundColor: 'rgba(148,159,177,0.2)',
+      borderColor: 'rgba(148,159,177,1)',
+      pointBackgroundColor: 'rgba(148,159,177,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+    },
+    { // dark grey
+      backgroundColor: 'rgba(77,83,96,0.2)',
+      borderColor: 'rgba(77,83,96,1)',
+      pointBackgroundColor: 'rgba(77,83,96,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(77,83,96,1)'
+    },
+    { // grey
+      backgroundColor: 'rgba(148,159,177,0.2)',
+      borderColor: 'rgba(148,159,177,1)',
+      pointBackgroundColor: 'rgba(148,159,177,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+    }
+  ];
 
   constructor(private passingService: PassingService) { }
 
@@ -34,13 +61,17 @@ export class ChartComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.chartLabels = this.createLabels('00:30','05:30');
     this.chartData = [
-      { data: this.dataNormal, label: 'test'},
-      { data: this.dataPassings, label: 'test1'},
+      { data: this.dataPassings, label: 'test'},
+      { data: this.dataNormal, label: 'test1'},
     ];
     this.fetchStats("fjallmara","hallfjallet");
   }
 
   ngAfterViewInit() {
+    // this.chartData = [
+    //   { data: this.dataNormal, label: 'test'},
+    //   { data: this.dataPassings, label: 'test1'},
+    // ];
   }
 
   pdf(value:number, mean:number, standardDeviation:number ): number {
@@ -83,22 +114,23 @@ export class ChartComponent implements OnInit, AfterViewInit {
   }
 
   createPdfSerie(mlabel:string[], mean:number, stddev:number): number[] {
-    console.log("mean[" + mean + "] stddev[" + stddev + "]");
-
-    const number_of_runners = 1000;
+    // console.log("mean[" + mean + "] stddev[" + stddev + "]");
 
     let ret= [];
     let x;
     const mean60 = mean/60;
     const stddev60 = stddev/60;
+    // console.log("mean60[" + mean60 + "] stddev60[" + stddev60 + "]");
     for (const labeltime of mlabel) {
-      let sec:number = +labeltime.split(":",2);
+      // console.log(labeltime);
+      let sec:number = labeltime.split(":",2);
+      // console.log(sec);
       sec = +sec[0]*60 + +sec[1];
       x = this.pdf(sec, mean60, stddev60);
-      x = +x * number_of_runners;
-      if (+x < 0.1){
-        x = 0;
-      }
+      // x = x * number_of_runners;
+      // if (x < 0.1){
+      //   x = 0;
+      // }
       ret.push(x);
     }
     return ret;
@@ -108,21 +140,22 @@ export class ChartComponent implements OnInit, AfterViewInit {
     //console.log('getLabelSerie' + (Passing)passings[1]);
     let checkpassings:Passing[] = passings;
     let ret= [];
-    while((Passing)checkpassings[0].time < mlabel[0]){
+    while(checkpassings[0].time < mlabel[0]){
       checkpassings.shift();
     }
     for (const labeltime of mlabel) {
-      if( 0 < checkpassings.length && labeltime == (Passing)checkpassings[0].time){
+      if( 0 < checkpassings.length && labeltime == checkpassings[0].time){
         ret.push(checkpassings[0].count)
         checkpassings.shift();
       }
-      else if(0 < checkpassings.length && labeltime > (Passing)checkpassings[0].time){
+      else if(0 < checkpassings.length && labeltime > checkpassings[0].time){
         //do nothing
       }
       else {
         ret.push(0);
       }
     }
+    console.log("ret[" + ret + "]");
     return ret;
   }
 
@@ -133,6 +166,8 @@ export class ChartComponent implements OnInit, AfterViewInit {
         this.v_fastest_time = stats['fastest_time'];
         this.v_slowest_time = stats['slowest_time'];
         this.v_avg_time = stats['avgtime'];
+        let nr_of_races = stats['numberofraces'];
+
         console.log(stats);
 
         let temp:number;
@@ -144,10 +179,20 @@ export class ChartComponent implements OnInit, AfterViewInit {
 
         this.chartLabels = [];
         this.chartLabels = this.createLabels(labelstart,labelend);
-        this.dataNormal = this.createPdfSerie(this.chartLabels, stats['avgtime_sec'], stats['stddev_sec']);
+        let tempNormal:number[] = this.createPdfSerie(this.chartLabels, stats['avgtime_sec'], stats['stddev_sec']);
+        for (const x of tempNormal){
+          this.dataNormal.push(x * this.v_totalrunners / nr_of_races);
+        }
+
+        let pass:Passing[] = stats['passings'];
+        console.log(pass);
         console.log("dataNormal" + this.dataNormal);
         console.log("passings: " + stats['passings'])
-        //this.data = this.getLabelSerie(this.chartLabels, stats['passings']);
+        let tempPassings = this.getLabelSerie(this.chartLabels, pass);
+        for (const x of tempPassings){
+          this.dataPassings.push(x / this.labelminutes / nr_of_races);// == 0 ? x : x/5
+        }
+        console.log("dataNormal" + this.dataPassings);
       });
   }
 
