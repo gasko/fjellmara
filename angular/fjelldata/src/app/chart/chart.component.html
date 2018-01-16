@@ -1,10 +1,9 @@
-<h2>My passings</h2>
-
-<ul>
-  <li>Antal löpare: {{v_totalrunners}} </li>
-<li>Snabbast tid: {{v_fastest_time}}</li>
-<li>Långsammast tid: {{v_slowest_time}}</li>
-<li>medeltid: {{v_avg_time}}</li>
+<ul class="statlist">
+  <li><div class="label">Antal löpare:</div> {{v_totalrunners}} </li>
+  <li><div class="label">Snabbaste man:</div> {{v_fastest_mtime}} - {{v_fastest_mtime_name}} ({{v_fastest_mtime_year}})</li>
+  <li><div class="label">Snabbaste dam:</div> {{v_fastest_ftime}} - {{v_fastest_ftime_name}} ({{v_fastest_ftime_year}})</li>
+  <li><div class="label">medeltid:</div> {{v_avg_time}}</li>
+  <li><div class="label">Långsammaste tid:</div> {{v_slowest_time}}</li>
 </ul>
 
 <div style="width: 100%;">

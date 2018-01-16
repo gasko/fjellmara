@@ -11,8 +11,6 @@ h2, h3 {
 }
 body {
   margin: 2em;
-  font-family: "Lato", sans-serif;
-  background-color: rgb(25,25,25);
 }
 body, input[text], button {
   color: #888;

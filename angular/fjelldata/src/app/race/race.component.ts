@@ -15,20 +15,57 @@ export class RaceComponent implements OnInit {
     private route: ActivatedRoute,
     //private raceService: RaceService,
     //private location: Location
-  ) {}
+  ) {
+  route.params.subscribe(val => {
+    this.alias = this.getRaceName();
+});
+}
   alias: string = 'test';
 
   ngOnInit(): void {
-    this.getAlias();
+    //this.getAlias();
   }
 
-  getAlias(): void {
+  getRaceName(): string {
+    let alias = this.getAlias();
+    switch(alias) {
+      case "fjallmara": {
+        return "Fjällmaraton";
+        break;
+      }
+      case "27k": {
+        return "Salomon 27K";
+        break;
+      }
+      case "oppet-fjall": {
+        return "Öppet Fjäll";
+        break;
+      }
+      case "kvartsmara": {
+        return "Kvartsmaraton";
+        break;
+      }
+      case "valliste": {
+        return "Välliste Runt";
+        break;
+      }
+      case "copper-trail": {
+        return "Copper Trail";
+        break;
+      }
+      case "verticalk": {
+        return "Vertical K";
+        break;
+      }
+      default: {
+        break;
+      }
+}
+  }
+  getAlias(): string {
     console.log(this.alias);
     console.log(this.route.snapshot.paramMap.keys);
     // console.log(+this.route.snapshot.paramMap.get Keys);
-    this.alias = this.route.snapshot.paramMap.get('alias');
-    console.log(this.alias);
-  //this.heroService.getHero(alias)
-  //.subscribe(hero => this.hero = hero);
+    return this.route.snapshot.paramMap.get('alias');
   }
 }

@@ -59,7 +59,7 @@ export class ChartComponent implements OnInit, AfterViewInit {
           {
             display: true,
             labelString: 'Löpare per minut',
-            fontColor: "#546372"
+            fontColor: "#555555"
           },
           gridLines: {
             display: true,
@@ -76,7 +76,7 @@ export class ChartComponent implements OnInit, AfterViewInit {
           {
             display: true,
             labelString: 'Tid sen start',
-            fontColor: "#546372"
+            fontColor: "#555555"
           },
           gridLines: {
             display: true,
@@ -92,21 +92,28 @@ export class ChartComponent implements OnInit, AfterViewInit {
   constructor(
     private passingService: PassingService,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    route.params.subscribe(val => {
+      let race = this.getAlias();
+      console.log("ALIAS[" + this.route.snapshot.paramMap.get('alias') + "]");
+      this.chartLabels = this.createLabels('00:30','05:30');
+      this.dataPassings = [];
+      this.dataNormal = [];
+      this.chartData = [
+        { data: this.dataPassings, label: 'Passeringar'},
+        { data: this.dataNormal, label: 'Normalfördelning'},
+      ];
+      console.log(race);
+      this.fetchStats(race,"Mål");
+  });
+  }
 
   onChartClick(event) {
     console.log(event);
   }
 
   ngOnInit() {
-    this.getAlias();
-    console.log("ALIAS[" + this.route.snapshot.paramMap.get('alias') + "]");
-    this.chartLabels = this.createLabels('00:30','05:30');
-    this.chartData = [
-      { data: this.dataPassings, label: 'Passeringar'},
-      { data: this.dataNormal, label: 'Normalfördelning'},
-    ];
-    this.fetchStats("fjallmara","hallfjallet");
+
   }
 
   ngAfterViewInit() {
@@ -116,14 +123,11 @@ export class ChartComponent implements OnInit, AfterViewInit {
     // ];
   }
 
-  getAlias(): void {
+  getAlias(): string {
     console.log(this.alias);
     console.log(this.route.snapshot.paramMap.keys);
     // console.log(+this.route.snapshot.paramMap.get Keys);
-    this.alias = this.route.snapshot.paramMap.get('alias');
-    console.log(this.alias);
-  //this.heroService.getHero(alias)
-  //.subscribe(hero => this.hero = hero);
+    return this.route.snapshot.paramMap.get('alias');
   }
 
   pdf(value:number, mean:number, standardDeviation:number ): number {
@@ -207,7 +211,7 @@ export class ChartComponent implements OnInit, AfterViewInit {
         ret.push(0);
       }
     }
-    console.log("ret[" + ret + "]");
+    // console.log("ret[" + ret + "]");
     return ret;
   }
 
@@ -215,19 +219,40 @@ export class ChartComponent implements OnInit, AfterViewInit {
     this.passingService.getStats(race,checkpoint).subscribe(stats =>
       {
         this.v_totalrunners = stats['tot_runners'];
-        this.v_fastest_time = stats['fastest_time'];
+        this.v_fastest_mtime = stats['fastest_m_time'];
+        this.v_fastest_mtime_name = stats['fastest_m_time_name'];
+        this.v_fastest_mtime_year = stats['fastest_m_time_year'];
+        this.v_fastest_ftime = stats['fastest_f_time'];
+        this.v_fastest_ftime_name = stats['fastest_f_time_name'];
+        this.v_fastest_ftime_year = stats['fastest_f_time_year'];
         this.v_slowest_time = stats['slowest_time'];
         this.v_avg_time = stats['avgtime'];
         let nr_of_races = stats['numberofraces'];
-
         console.log(stats);
 
-        let temp:number;
-        temp = Math.trunc(stats['fastest_time_sec']/1800);
-        let labelstart = this.minutesToHourMinute(temp*30);
+        let fastest_time_sec:number;
 
-        temp = Math.trunc(stats['slowest_time_sec']/1800)+1;
-        let labelend = this.minutesToHourMinute(temp*30);
+        if (stats['fastest_m_time_sec'] <= stats['fastest_m_time_sec']){
+          fastest_time_sec = stats['fastest_m_time_sec'];
+        }
+        else {
+          fastest_time_sec = stats['fastest_f_time_sec'];
+        }
+
+        // console.log("fastest time sec: " + fastest_time_sec);
+        // console.log(fastest_time_sec-600);
+        // console.log((fastest_time_sec-600)/900);
+        //console.log(Math.trunc(fastest_time_sec-600)/900));
+
+        // 600 = 10min tidigare, 900 = 15*60 dela upp i 15min delar
+        let tempx : number;
+        tempx = Math.trunc((fastest_time_sec-600)/900);
+
+        // starta på kvarten innan första tid
+        let labelstart = this.minutesToHourMinute(tempx*15);
+        // sluta på kvarten efter sista tid
+        tempx = Math.trunc(stats['slowest_time_sec']/900)+1;
+        let labelend = this.minutesToHourMinute(tempx*15);
 
         this.chartLabels = [];
         this.chartLabels = this.createLabels(labelstart,labelend);
@@ -237,25 +262,25 @@ export class ChartComponent implements OnInit, AfterViewInit {
         }
 
         let pass:Passing[] = stats['passings'];
-        console.log(pass);
-        console.log("dataNormal" + this.dataNormal);
-        console.log("passings: " + stats['passings'])
+        // console.log(pass);
+        // console.log("dataNormal" + this.dataNormal);
+        // console.log("passings: " + stats['passings'])
         let tempPassings = this.getLabelSerie(this.chartLabels, pass);
         for (const x of tempPassings){
           this.dataPassings.push(x / this.labelminutes / nr_of_races);// == 0 ? x : x/5
         }
-        console.log("dataNormal" + this.dataPassings);
+        // console.log("dataNormal" + this.dataPassings);
       });
   }
 
-  fetchPassings(race:string, checkpoint:string, year:number) {
-    this.passingService.getPassings(race,checkpoint,year).subscribe(passings =>
-      {
-        let checkpassings = passings;
-        this.ret= [];
-        this.ret = this.getLabelSerie(this.label, passings);
-      });
-  }
+  // fetchPassings(race:string, checkpoint:string, year:number) {
+  //   this.passingService.getPassings(race,checkpoint,year).subscribe(passings =>
+  //     {
+  //       let checkpassings = passings;
+  //       this.ret= [];
+  //       this.ret = this.getLabelSerie(this.label, passings);
+  //     });
+  // }
 
 
 
