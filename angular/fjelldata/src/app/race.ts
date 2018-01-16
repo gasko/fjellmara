@@ -7,5 +7,6 @@ export enum RaceEnum {
     FJALLMARA = 'fjallmara' ,
     S27K = '27k',
     VALLISTE = 'valliste',
-    VERTICALK = 'verticalk'
+    VERTICALK = 'verticalk',
+    OPPETFJALL = 'oppet-fjall'
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit} from '@angular/core';
-import {  } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ChartsModule } from 'ng2-charts';
 import { Passing } from '../passing';
 import { CheckpointStat } from '../checkpointStat';
@@ -47,22 +47,64 @@ export class ChartComponent implements OnInit, AfterViewInit {
     }
   ];
 
-  constructor(private passingService: PassingService) { }
-
   chartOptions = {
-    responsive: true
+    responsive: true,
+    scales: {
+      yAxes: [
+        {
+          //id: 'y-axis-1',
+          display: true,
+          position: 'left',
+          scaleLabel:
+          {
+            display: true,
+            labelString: 'Löpare per minut',
+            fontColor: "#546372"
+          },
+          gridLines: {
+            display: true,
+            color: "#555555"
+          }
+        }
+      ],
+      xAxes: [
+        {
+          //id: 'x-axis-1',
+          display: true,
+          position: 'left',
+          scaleLabel:
+          {
+            display: true,
+            labelString: 'Tid sen start',
+            fontColor: "#546372"
+          },
+          gridLines: {
+            display: true,
+            color: "#555555"
+          }
+        }
+      ]
+    }
   };
 
+  alias: string = 'test';
+
+  constructor(
+    private passingService: PassingService,
+    private route: ActivatedRoute
+  ) {}
 
   onChartClick(event) {
     console.log(event);
   }
 
   ngOnInit() {
+    this.getAlias();
+    console.log("ALIAS[" + this.route.snapshot.paramMap.get('alias') + "]");
     this.chartLabels = this.createLabels('00:30','05:30');
     this.chartData = [
-      { data: this.dataPassings, label: 'test'},
-      { data: this.dataNormal, label: 'test1'},
+      { data: this.dataPassings, label: 'Passeringar'},
+      { data: this.dataNormal, label: 'Normalfördelning'},
     ];
     this.fetchStats("fjallmara","hallfjallet");
   }
@@ -72,6 +114,16 @@ export class ChartComponent implements OnInit, AfterViewInit {
     //   { data: this.dataNormal, label: 'test'},
     //   { data: this.dataPassings, label: 'test1'},
     // ];
+  }
+
+  getAlias(): void {
+    console.log(this.alias);
+    console.log(this.route.snapshot.paramMap.keys);
+    // console.log(+this.route.snapshot.paramMap.get Keys);
+    this.alias = this.route.snapshot.paramMap.get('alias');
+    console.log(this.alias);
+  //this.heroService.getHero(alias)
+  //.subscribe(hero => this.hero = hero);
   }
 
   pdf(value:number, mean:number, standardDeviation:number ): number {
