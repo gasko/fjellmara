@@ -7,7 +7,8 @@ import { ChartComponent } from './chart/chart.component';
 const routes: Routes = [
   { path: 'races', component: RacesComponent },
   { path: 'chart', component: ChartComponent },
-  { path: 'race/:alias', component: RaceComponent }
+  { path: 'race/:alias', component: RaceComponent },
+  { path: 'race/:alias/:c_alias', component: RaceComponent }
 ];
 
 @NgModule({

@@ -1,4 +1,4 @@
 export class Checkpoint {
   name: string;
-  distance: number;
+  location_order: number;
 }

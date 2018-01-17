@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Passing } from './passing';
+import { Checkpoint } from './checkpoint';
 import { CheckpointStat } from './checkpointStat';
 import { MessageService } from './message.service';
 import { PASSINGS17, PASSINGS16, PASSINGS15 } from './mock-passing';
@@ -61,8 +62,14 @@ export class PassingService {
   }
 
   getStats(race:string, checkpoint:string): Observable<Passing[]> {
-    this.messageService.add('PassingService: fetched passings');
-    var passingsUrl = 'http://localhost/fjellmara/backend_get_checkpoint_stat.php?race='+race+'&checkpoint='+checkpoint;
-    return this.http.get<Stat>(passingsUrl);
+    this.messageService.add('PassingService: fetched stats');
+    let fetchUrl = 'http://localhost/fjellmara/backend_get_checkpoint_stat.php?race='+race+'&checkpoint='+checkpoint;
+    return this.http.get<Stat>(fetchUrl);
+  }
+
+  getCheckpoints(race:string): Observable<Checkpoint[]> {
+    this.messageService.add('PassingService: fetched checkpoints');
+    let fetchUrl = 'http://localhost/fjellmara/backend_get_checkpoints.php?race='+race;
+    return this.http.get<Stat>(fetchUrl);
   }
 }

@@ -14,6 +14,7 @@ import { PassingService } from '../passing.service';
 export class ChartComponent implements OnInit, AfterViewInit {
   canvas: any;
   ctx: any;
+  chartLabels: any;
   v_totalrunners : number;
   v_fastest_mtime : string;
   v_fastest_mtime_name : string;
@@ -24,6 +25,8 @@ export class ChartComponent implements OnInit, AfterViewInit {
   v_slowest_time : string;
   v_avg_time : string;
 
+  alias: string;
+  c_alias: string;
 
   passings: Passing[];
   labelminutes:number = 5;
@@ -98,7 +101,7 @@ export class ChartComponent implements OnInit, AfterViewInit {
     }
   };
 
-  alias: string = 'test';
+
 
   constructor(
     private passingService: PassingService,
@@ -106,7 +109,8 @@ export class ChartComponent implements OnInit, AfterViewInit {
   ) {
     route.params.subscribe(val => {
       let race = this.getAlias();
-      console.log("ALIAS[" + this.route.snapshot.paramMap.get('alias') + "]");
+      let checkpoint = this.getCAlias();
+
       this.chartLabels = this.createLabels('00:30','05:30');
       this.dataPassings = [];
       this.dataNormal = [];
@@ -115,7 +119,7 @@ export class ChartComponent implements OnInit, AfterViewInit {
         { data: this.dataNormal, label: 'Normalfördelning'},
       ];
       console.log(race);
-      this.fetchStats(race,"finnish");
+      this.fetchStats(race,checkpoint);
   });
   }
 
@@ -135,10 +139,23 @@ export class ChartComponent implements OnInit, AfterViewInit {
   }
 
   getAlias(): string {
-    console.log(this.alias);
-    console.log(this.route.snapshot.paramMap.keys);
+    // console.log(this.alias);
+    // console.log(this.route.snapshot.paramMap.keys);
     // console.log(+this.route.snapshot.paramMap.get Keys);
     return this.route.snapshot.paramMap.get('alias');
+  }
+  getCAlias(): string {
+    // console.log(this.c_alias);
+    // console.log(this.route.snapshot.paramMap.keys);
+    // console.log(+this.route.snapshot.paramMap.get Keys);
+    let temp:string = this.route.snapshot.paramMap.get('c_alias');
+
+    if (temp){
+      return temp;
+    } else {
+      return "finnish";
+    }
+
   }
 
   pdf(value:number, mean:number, standardDeviation:number ): number {

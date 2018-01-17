@@ -1,3 +1,53 @@
 h2 {
   color: white;
 }
+
+
+ul.c_nav {
+    list-style-type: none !important;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+ul.c_nav a {
+  transition: all 0.1s;
+}
+
+.c_nav li {
+    float: left;
+    border: 0;
+    text-transform: uppercase;
+}
+
+.c_nav li:last-child {
+    border-right: none;
+}
+
+.c_nav li a {
+    display: block;
+    border: 1px solid rgba(255,255,255,0.8);
+    border-radius: 3px;
+    color: white;
+    text-align: center;
+    margin: 0.1em 0.1em;
+    padding: 1em 1em;
+    font-size: 0.6em;
+    color: rgb(255,255,255);
+    background-color: #222;
+    text-decoration: none;
+}
+
+.c_nav li a:hover:not(.active) {
+    background-color: #444;
+    border: 1px solid rgba(255,255,255,0.8);
+}
+
+.c_nav li a.active {
+  color: #039be5;
+  background-color: #999;
+}
+
+.c_nav .active {
+    background-color: #4CAF50;
+}

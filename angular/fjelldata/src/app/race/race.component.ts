@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { PassingService } from '../passing.service';
+import { Checkpoint } from '../checkpoint';
 
 //import { raceService }  from '../race.service';
 
@@ -11,19 +13,25 @@ import { Location } from '@angular/common';
 })
 
 export class RaceComponent implements OnInit {
+  selectedCheckpoint: Checkpoint;
   constructor(
     private route: ActivatedRoute,
+    private passingService: PassingService,
     //private raceService: RaceService,
     //private location: Location
   ) {
+
   route.params.subscribe(val => {
-    this.alias = this.getRaceName();
+    this.alias = this.getAlias();
+    this.race = this.getRaceName();
+    this.fetchCheckpoints(this.alias);
 });
 }
-  alias: string = 'test';
+  alias: string;
+  race: string;
 
   ngOnInit(): void {
-    //this.getAlias();
+
   }
 
   getRaceName(): string {
@@ -57,8 +65,12 @@ export class RaceComponent implements OnInit {
         return "Vertical K";
         break;
       }
-      case "bydalsfjallen": {
-        return "Bydalen Fjällmaraton";
+      case "bydalsfjallen22": {
+        return "Bydalen Fjällmaraton 22K";
+        break;
+      }
+      case "bydalsfjallen50": {
+        return "Bydalen Fjällmaraton 50K";
         break;
       }
       default: {
@@ -72,4 +84,24 @@ export class RaceComponent implements OnInit {
     // console.log(+this.route.snapshot.paramMap.get Keys);
     return this.route.snapshot.paramMap.get('alias');
   }
+
+  fetchCheckpoints(race:string) {
+    this.passingService.getCheckpoints(race).subscribe(checkpoints =>
+      {
+        console.log(checkpoints);
+        let temp: Checkpoint[] = [];
+        for (let checkpoint of checkpoints){
+          if(checkpoint.name == "start" || checkpoint.name == "pre finnish"){
+            continue;
+          }
+          // else if(checkpoint.name == "finnish") {
+          //   checkpoint.name = "Mål";
+          // }
+
+          temp.push(checkpoint);
+        }
+        this.checkpoints = temp;
+      });
+  }
+
 }
