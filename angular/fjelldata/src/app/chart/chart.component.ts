@@ -115,7 +115,7 @@ export class ChartComponent implements OnInit, AfterViewInit {
         { data: this.dataNormal, label: 'Normalfördelning'},
       ];
       console.log(race);
-      this.fetchStats(race,"Mål");
+      this.fetchStats(race,"finnish");
   });
   }
 

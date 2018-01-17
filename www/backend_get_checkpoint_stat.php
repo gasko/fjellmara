@@ -118,13 +118,26 @@ function get_passings($conn, $race, $checkpoint, $time_in_sec){
 
 
 function get_avgtime($conn, $race, $checkpoint) {
+  // $query =
+  //   " SELECT MIN(TIME_TO_SEC(`timepassed`)) AS ftime
+  //     FROM checkpoints c INNER JOIN results r
+  //       ON c.results_id = r.id
+  //       WHERE
+  //         c.name = '{$checkpoint}' AND
+  //         r.race = '{$race}' AND
+  //         r.status = 'TIME'";
+  // $sth = mysqli_query($conn, $query);
+  // $r1 = mysqli_fetch_assoc($sth);
+  //
+  // $temp = $r1["ftime"] * 4;
+
   $query =
     " SELECT AVG(TIME_TO_SEC(`timepassed`)) AS avgtime
       FROM checkpoints c INNER JOIN results r
         ON c.results_id = r.id
         WHERE
           c.name = '{$checkpoint}' AND
-          r.race = '{$race}'";
+          r.race = '{$race}' ";
 
   $sth = mysqli_query($conn, $query);
   $r = mysqli_fetch_assoc($sth);

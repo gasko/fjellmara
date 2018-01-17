@@ -21,11 +21,111 @@ def checkstage(stage):
 def checkclass(xclass):
     return xclass
 
-def checklocation(location):
-    if location in ("Mål 1000M"):
-        return "Mål"
-    else :
-        return location
+
+def checklocation(race, location):
+    if race in ("Fjällmaraton", "Öppet Fjäll"):
+        if location in ("Start Reg","Start Reg.", "Start reg", "StartVålådalen", "Start Vålådalen", "Start Våladalen"):
+            return ["start", 0]
+        elif location in ("Ottfjället"):
+            return ["Ottfjället", 1]
+        elif location in ("Nordbottnen"):
+            return ["Nordbottnen", 2]
+        elif location in ("Hållfjället"):
+            return ["Hållfjället", 3]
+        elif location in ("Ottsjö", "Ottsjön", "Ottsjöbua"):
+            return ["Ottsjö", 4]
+        elif location in ("Välliste"):
+            return ["Välliste", 5]
+        elif location in ("Pre. mål", "Pre. Mål", "Pre.Mål"):
+            return ["pre finnish", 6]
+        elif  location in ("Mål"):
+            return ["finnish", 7]
+        elif location in ("Grofjället"):
+            return ["Grofjället", 10]
+
+    if race == "27k":
+        if location in ("start"):
+            return ["start", 0]
+        elif location in ("Hållfjället"):
+            return ["Hållfjället", 1]
+        elif location in ("Grofjället"):
+            return ["Grofjället", 2]
+        elif location in ("Välliste"):
+            return ["Välliste", 3]
+        elif location in ("Pre. mål", "Pre. Mål", "Pre.Mål"):
+            return ["pre finnish", 4]
+        elif  location in ("Mål"):
+            return ["finnish", 5]
+
+    if race == "Välliste Runt":
+        if location in ("start"):
+            return ["start", 0]
+        elif location in ("Välliste"):
+            return ["Välliste", 1]
+        elif location in ("Pre. mål", "Pre. Mål", "Pre.Mål"):
+            return ["pre finnish", 2]
+        elif  location in ("Mål"):
+            return ["finnish", 3]
+
+    if race == "Vertical K":
+        if location in ("start"):
+            return ["start", 0]
+        elif location in ("250M", "250M K"):
+            return ["250M", 1]
+        elif location in ("500M", "Mål 500M K"):
+            return ["500M", 2]
+        elif  location in ("750M"):
+            return ["750M", 3]
+        elif  location in ("Mål 1000M","Mål"):
+            return ["finnish", 4]
+
+    if race == "Copper Trail":
+        if location in ("start"):
+            return ["start", 0]
+        elif location in ("Vändning"):
+            return ["Vändning", 1]
+        elif location in ("Pre. mål", "Pre. Mål", "Pre.Mål"):
+            return ["pre finnish", 2]
+        elif  location in ("Mål"):
+            return ["finnish", 3]
+
+    if race == "Kvartsmaraton":
+        if location in ("start", "Start reg"):
+            return ["start", 0]
+        elif location in ("Välliste"):
+            return ["Välliste", 1]
+        elif location in ("Pre. mål", "Pre. Mål", "Pre.Mål"):
+            return ["pre finnish", 2]
+        elif  location in ("Mål"):
+            return ["finnish", 3]
+
+    if race == "Bydalen Fjällmaraton":
+        if location in ("start", "Start reg"):
+            return ["start", 0]
+        elif location in ("Mårdsundsbodarna", "Mårdsundsbodarna "):
+            return ["Mårdsundsbodarna", 1]
+        elif location in ("Mårdsundsbodarna"):
+            return ["Mårdsundsbodarna",2]
+        elif location in ("Bydalen"):
+            return ["Bydalen", 3]
+        elif location in ("Drombacken","Höglekardalen"):
+            return ["Drombacken", 4]
+        elif location in ("Falkfångarfjället"):
+            return ["Falkfångarfjället", 5]
+        elif location in ("Förvarning"):
+            return ["pre finnish", 6]
+        elif  location in ("Mål"):
+            return ["finnish", 7]
+
+    if race == "Halvmaraton":
+        return [location,-1]
+
+    print("ERROR couldn't find checkpoint for [" + race + "-" + location + "]")
+    sys.exit(0)
+
+
+
+
 
 ## Help function to print current row from CSV-file
 def printRow(row):
@@ -51,16 +151,19 @@ def getCorrectDateFormat(s_date):
     print ("Date is not in expected format: [" + s_date +"]" )
     sys.exit(0)
 
-def updateCheckpointsBydalen14(conn, results_id, checkpoint, time, distance) :
+def updateCheckpointsBydalen14(conn, race, results_id, checkpoint, time, distance) :
             if time in (None,"","-") :
                 return
             if time == "IT" :
                 time = None
 
+            location = checklocation(race, checkpoint)[0]
+            location_order = checklocation(race, checkpoint)[1]
+
             c = conn.cursor()
-            sql = '''INSERT INTO checkpoints (results_id, name,timepassed, distance)
-                     VALUES (%s,%s,%s,%s)'''
-            params = (results_id, checkpoint, time, distance)
+            sql = '''INSERT INTO checkpoints (results_id, name,timepassed, distance, location_order)
+                     VALUES (%s,%s,%s,%s,%s)'''
+            params = (results_id, location, time, distance, location_order)
 
             try:
                 c.execute(sql , params)
@@ -127,14 +230,14 @@ def collectFromBydalen14Csv(conn, csvfile, race, year, stage, gender, xclass):
                 print(str(bib) + " " + race + " " + str(year))
             results_id = res['id']
 
-            updateCheckpointsBydalen14(conn, results_id, "Mårdsundsbodarna", row[7], 10500)
+            updateCheckpointsBydalen14(conn, race, results_id, "Mårdsundsbodarna", row[7], 10500)
             if len(row)>8:
-                updateCheckpointsBydalen14(conn, results_id, "Mål", row[6], 49000)
-                updateCheckpointsBydalen14(conn, results_id, "Bydalen", row[8], 22500)
-                updateCheckpointsBydalen14(conn, results_id, "Drombacken", row[9], 30000)
-                updateCheckpointsBydalen14(conn, results_id, "Falkfångarfjället", row[10], 40000)
+                updateCheckpointsBydalen14(conn, race, results_id, "Mål", row[6], 49000)
+                updateCheckpointsBydalen14(conn, race, results_id, "Bydalen", row[8], 22500)
+                updateCheckpointsBydalen14(conn, race, results_id, "Drombacken", row[9], 30000)
+                updateCheckpointsBydalen14(conn, race, results_id, "Falkfångarfjället", row[10], 40000)
             else :
-                updateCheckpointsBydalen14(conn, results_id, "Mål", row[6], 22000)
+                updateCheckpointsBydalen14(conn, race, results_id, "Mål", row[6], 22000)
     conn.commit()
 
 ## Collect DATA from the *_resultat.csv
@@ -188,7 +291,8 @@ def collectFromCheckpointsCsv(conn, csvfile, race, year):
                 race="Öppet Fjäll"
             bib = row[2]
             email = row[7]
-            location = checklocation(row[9])
+            location = checklocation(race, row[9])[0]
+            location_order = checklocation(race, row[9])[1]
             timeofday = row[13]
             time = row[14]
             distance = row[10]
@@ -226,9 +330,9 @@ def collectFromCheckpointsCsv(conn, csvfile, race, year):
             res = c.fetchone()
             #print(res)
             if res==None:
-                sql = '''INSERT INTO checkpoints (results_id, name, timeofday, timepassed, distance)
-                        VALUES (%s,%s,%s,%s,%s)'''
-                params = (_id, "start", starttime, "00:00:00", 0)
+                sql = '''INSERT INTO checkpoints (results_id, name, timeofday, timepassed, distance, location_order)
+                        VALUES (%s,%s,%s,%s,%s,%s)'''
+                params = (_id, "start", starttime, "00:00:00", 0, 0)
                 try:
                     c.execute(sql , params)
 
@@ -243,16 +347,16 @@ def collectFromCheckpointsCsv(conn, csvfile, race, year):
             timetemp = time.split(":")
             timetempsum = int(timetemp[0])*60*60 + int(timetemp[1])*60 + int(timetemp[2])
 
-            if location == "Mål" and timetempsum <= 59:
+            if location == "finnish" and timetempsum <= 59:
                 continue;
 
             ##   For every checkpoint that will be passed under one hour
             if race == "Copper Trail" and int(timetemp[0]) > 10 :
                 time = "00:" + timetemp[0] + ":" + timetemp[1]
 
-            sql = '''INSERT INTO checkpoints (results_id, name, timeofday, timepassed, distance)
-                     VALUES (%s,%s,%s,%s,%s)'''
-            params = (_id, location, timeofday, time, distance)
+            sql = '''INSERT INTO checkpoints (results_id, name, timeofday, timepassed, distance, location_order)
+                     VALUES (%s,%s,%s,%s,%s,%s)'''
+            params = (_id, location, timeofday, time, distance, location_order)
 
             try:
                 c.execute(sql , params)
@@ -278,13 +382,21 @@ if __name__ == '__main__':
                              cursorclass=pymysql.cursors.DictCursor)
 
 
+    __BYDALEN__ = 1
+    __27K__ = 1
+    __FJALLMARATON__ = 1
+    __KVARTSMARATON__ = 1
+    __VALLISTERUNT__ = 1
+    __COPPERTRAIL__ = 1
+    __VERTICALK__ = 1
+    __OPPETFJALL__ = 1
 
     ##############################################
     ##                                          ##
     ##  Bydalen                                 ##
     ##                                          ##
     ##############################################
-    if 1 :
+    if __BYDALEN__ :
         race = 'Bydalen Fjällmaraton'
 
         #Results Bydalen 2017
@@ -329,7 +441,7 @@ if __name__ == '__main__':
     ##                                          ##
     ##############################################
 
-    if 1 :
+    if __27K__ :
         race = '27k'
 
         #Results 27K 2017
@@ -348,7 +460,7 @@ if __name__ == '__main__':
     ##                                          ##
     ##############################################
 
-    if 1 :
+    if __FJALLMARATON__ :
         race = 'Fjällmaraton'
 
         #Results Fjällmaraton 2017
@@ -373,7 +485,7 @@ if __name__ == '__main__':
     ##                                          ##
     ##############################################
 
-    if 1 :
+    if __KVARTSMARATON__ :
         race = 'Kvartsmaraton'
         year=2017
         collectFromResultatCsv(conn, 'csv/Kvartsmaraton/Kvartsmaraton_2017_resultat.csv', race, year)
@@ -383,13 +495,13 @@ if __name__ == '__main__':
         collectFromResultatCsv(conn, 'csv/Kvartsmaraton/Kvartsmaraton_2016_resultat.csv', race, year)
         collectFromCheckpointsCsv(conn, 'csv/Kvartsmaraton/Kvartsmaraton_2016_mellantider.csv', race, year)
 
-    if 1 :
+    if __VALLISTERUNT__ :
         race = 'Välliste Runt'
         year=2017
         collectFromResultatCsv(conn, 'csv/VallisteRunt/VallisteRunt_2017_resultat.csv', race, year)
         collectFromCheckpointsCsv(conn, 'csv/VallisteRunt/VallisteRunt_2017_mellantider.csv', race, year)
 
-    if 1 :
+    if __COPPERTRAIL__ :
         race = 'Copper Trail'
 
         #Results Copper Trail 2017
@@ -397,7 +509,7 @@ if __name__ == '__main__':
         collectFromResultatCsv(conn, 'csv/CopperTrail/CopperTrail_2017_resultat.csv', race, year)
         collectFromCheckpointsCsv(conn, 'csv/CopperTrail/CopperTrail_2017_mellantider.csv', race, year)
 
-    if 1 :
+    if __VERTICALK__ :
         race = 'Vertical K'
 
         year=2017
@@ -408,7 +520,7 @@ if __name__ == '__main__':
         collectFromResultatCsv(conn, 'csv/VerticalK/VerticalK_2016_resultat.csv', race, year)
         collectFromCheckpointsCsv(conn, 'csv/VerticalK/VerticalK_2016_mellantider.csv', race, year)
 
-    if 1 :
+    if __OPPETFJALL__ :
         race = 'Öppet Fjäll'
 
         year=2017
