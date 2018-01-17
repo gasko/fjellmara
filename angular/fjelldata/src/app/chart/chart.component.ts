@@ -14,6 +14,17 @@ import { PassingService } from '../passing.service';
 export class ChartComponent implements OnInit, AfterViewInit {
   canvas: any;
   ctx: any;
+  v_totalrunners : number;
+  v_fastest_mtime : string;
+  v_fastest_mtime_name : string;
+  v_fastest_mtime_year : number;
+  v_fastest_ftime : string;
+  v_fastest_ftime_name : string;
+  v_fastest_ftime_year : number;
+  v_slowest_time : string;
+  v_avg_time : string;
+
+
   passings: Passing[];
   labelminutes:number = 5;
   dataPassings : number[] = [];

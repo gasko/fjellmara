@@ -37,6 +37,10 @@ if (isset($_GET['race'])){
       $race = "Vertical K";
       break;
     }
+    case "bydalsfjallen": {
+      $race = "Bydalen Fjällmaraton";
+      break;
+    }
     default: {
       break;
     }
@@ -148,7 +152,8 @@ function get_fastest_time($conn, $race, $checkpoint, $gender){
         WHERE
           r.gender = '{$gender}' AND
           c.name = '{$checkpoint}' AND
-          r.race = '{$race}'";
+          r.race = '{$race}' AND
+          r.status = 'TIME'";
   $sth = mysqli_query($conn, $query);
   $r1 = mysqli_fetch_assoc($sth);
 

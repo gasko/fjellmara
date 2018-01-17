@@ -21,6 +21,11 @@ def checkstage(stage):
 def checkclass(xclass):
     return xclass
 
+def checklocation(location):
+    if location in ("Mål 1000M"):
+        return "Mål"
+    else :
+        return location
 
 ## Help function to print current row from CSV-file
 def printRow(row):
@@ -145,6 +150,11 @@ def collectFromResultatCsv(conn, csvfile, race, year):
             stage = checkstage(row[14])
             if row[14] == "Kvartsmaraton" :
                 race = "Kvartsmaraton"
+            elif  row[14] == "Halvmaraton" :
+                race = "Halvmaraton"
+            elif row[14]=="Öppet fjäll":
+                        race="Öppet Fjäll"
+
             xclass= checkclass(row[12])
             sql = '''INSERT INTO results (race, year, bib, firstname, surname, gender, birthdate, city, nation, club, class, stage, status, time)
                              VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
@@ -172,9 +182,13 @@ def collectFromCheckpointsCsv(conn, csvfile, race, year):
         for row in reader:
             if row[0]=="Kvartsmaraton":
                 race="Kvartsmaraton"
+            elif row[0]=="Halvmaraton":
+                race="Halvmaraton"
+            elif row[0]=="Öppet fjäll":
+                race="Öppet Fjäll"
             bib = row[2]
             email = row[7]
-            location = row[9]
+            location = checklocation(row[9])
             timeofday = row[13]
             time = row[14]
             distance = row[10]
@@ -348,9 +362,32 @@ if __name__ == '__main__':
         collectFromCheckpointsCsv(conn, 'csv/Fjallmaraton/Fjallmaraton_2016_mellantider.csv', race, year)
 
         #Results Fjällmaraton 2015
+        #inkluderar kvartsmaraton
         year=2015
         collectFromResultatCsv(conn, 'csv/Fjallmaraton/Fjallmaraton_2015_resultat.csv', race, year)
         collectFromCheckpointsCsv(conn, 'csv/Fjallmaraton/Fjallmaraton_2015_mellantider.csv', race, year)
+
+    ##############################################
+    ##                                          ##
+    ##  Kvartsmaraton                           ##
+    ##                                          ##
+    ##############################################
+
+    if 1 :
+        race = 'Kvartsmaraton'
+        year=2017
+        collectFromResultatCsv(conn, 'csv/Kvartsmaraton/Kvartsmaraton_2017_resultat.csv', race, year)
+        collectFromCheckpointsCsv(conn, 'csv/Kvartsmaraton/Kvartsmaraton_2017_mellantider.csv', race, year)
+
+        year=2016
+        collectFromResultatCsv(conn, 'csv/Kvartsmaraton/Kvartsmaraton_2016_resultat.csv', race, year)
+        collectFromCheckpointsCsv(conn, 'csv/Kvartsmaraton/Kvartsmaraton_2016_mellantider.csv', race, year)
+
+    if 1 :
+        race = 'Välliste Runt'
+        year=2017
+        collectFromResultatCsv(conn, 'csv/VallisteRunt/VallisteRunt_2017_resultat.csv', race, year)
+        collectFromCheckpointsCsv(conn, 'csv/VallisteRunt/VallisteRunt_2017_mellantider.csv', race, year)
 
     if 1 :
         race = 'Copper Trail'
@@ -360,4 +397,29 @@ if __name__ == '__main__':
         collectFromResultatCsv(conn, 'csv/CopperTrail/CopperTrail_2017_resultat.csv', race, year)
         collectFromCheckpointsCsv(conn, 'csv/CopperTrail/CopperTrail_2017_mellantider.csv', race, year)
 
+    if 1 :
+        race = 'Vertical K'
+
+        year=2017
+        collectFromResultatCsv(conn, 'csv/VerticalK/VerticalK_2017_resultat.csv', race, year)
+        collectFromCheckpointsCsv(conn, 'csv/VerticalK/VerticalK_2017_mellantider.csv', race, year)
+
+        year=2016
+        collectFromResultatCsv(conn, 'csv/VerticalK/VerticalK_2016_resultat.csv', race, year)
+        collectFromCheckpointsCsv(conn, 'csv/VerticalK/VerticalK_2016_mellantider.csv', race, year)
+
+    if 1 :
+        race = 'Öppet Fjäll'
+
+        year=2017
+        collectFromResultatCsv(conn, 'csv/OppetFjall/OppetFjall_2017_resultat.csv', race, year)
+        collectFromCheckpointsCsv(conn, 'csv/OppetFjall/OppetFjall_2017_mellantider.csv', race, year)
+
+        year=2016
+        collectFromResultatCsv(conn, 'csv/OppetFjall/OppetFjall_2016_resultat.csv', race, year)
+        collectFromCheckpointsCsv(conn, 'csv/OppetFjall/OppetFjall_2016_mellantider.csv', race, year)
+
+        year=2015
+        collectFromResultatCsv(conn, 'csv/OppetFjall/OppetFjall_2015_resultat.csv', race, year)
+        collectFromCheckpointsCsv(conn, 'csv/OppetFjall/OppetFjall_2015_mellantider.csv', race, year)
     conn.close()

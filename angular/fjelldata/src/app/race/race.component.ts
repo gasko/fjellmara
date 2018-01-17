@@ -57,6 +57,10 @@ export class RaceComponent implements OnInit {
         return "Vertical K";
         break;
       }
+      case "bydalsfjallen": {
+        return "Bydalen Fjällmaraton";
+        break;
+      }
       default: {
         break;
       }
