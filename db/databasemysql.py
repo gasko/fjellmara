@@ -11,11 +11,9 @@ def checktime(time):
     return time
 
 def checkstage(stage):
-    if stage in ("50K", "22K"):
-        return stage
-    elif stage in ("Bydalen 50 km", "50km"):
+    if stage in ("50K", "Bydalen 50 km", "50km"):
         return "50K"
-    elif stage in ("Bydalen 22 km", "22km"):
+    elif stage in ("22K", "Bydalen 22 km", "22km"):
         return "22K"
 
 def checkclass(xclass):
@@ -117,6 +115,20 @@ def checklocation(race, location):
         elif  location in ("Mål"):
             return ["finnish", 7]
 
+    # if race == "Bydalen Fjällmaraton 22K":
+    #     if location in ("start", "Start reg"):
+    #         return ["start", 0]
+    #     elif location in ("Mårdsundsbodarna", "Mårdsundsbodarna "):
+    #         return ["Mårdsundsbodarna", 1]
+    #     elif location in ("Mårdsundsbodarna"):
+    #         return ["Mårdsundsbodarna",2]
+    #     elif location in ("Bydalen"):
+    #         return ["Bydalen", 3]
+    #     elif location in ("Förvarning"):
+    #         return ["pre finnish", 4]
+    #     elif  location in ("Mål"):
+    #         return ["finnish", 5]
+
     if race == "Halvmaraton":
         return [location,-1]
 
@@ -161,7 +173,7 @@ def updateCheckpointsBydalen14(conn, race, results_id, checkpoint, time, distanc
             location_order = checklocation(race, checkpoint)[1]
 
             c = conn.cursor()
-            sql = '''INSERT INTO checkpoints (results_id, name,timepassed, distance, location_order)
+            sql = '''INSERT INTO checkpoints (results_id, name, timepassed, distance, location_order)
                      VALUES (%s,%s,%s,%s,%s)'''
             params = (results_id, location, time, distance, location_order)
 
@@ -258,7 +270,14 @@ def collectFromResultatCsv(conn, csvfile, race, year):
             elif row[14]=="Öppet fjäll":
                         race="Öppet Fjäll"
 
-            xclass= checkclass(row[12])
+            xclass = checkclass(row[12])
+
+            # if race in ("Bydalen Fjällmaraton", "Bydalen Fjällmaraton 22K", "Bydalen Fjällmaraton 50K"):
+            #     if stage == "50K":
+            #         race = "Bydalen Fjällmaraton 50K"
+            #     elif stage == "22K":
+            #         race = "Bydalen Fjällmaraton 22K"
+
             sql = '''INSERT INTO results (race, year, bib, firstname, surname, gender, birthdate, city, nation, club, class, stage, status, time)
                              VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
             params = (race, year, row[0], row[1], row[2], row[4], birthdate, row[6], row[7], row[10], xclass, stage, row[16], time)
@@ -267,11 +286,11 @@ def collectFromResultatCsv(conn, csvfile, race, year):
 
             except pymysql.err.InternalError as e:
                 code, msg = e.args
-                print('WARNING ' +str(code) + ': ' + msg)
+                ##print('WARNING ' +str(code) + ': ' + msg)
 
             except pymysql.err.IntegrityError as e:
                 code, msg = e.args
-                print('WARNING ' +str(code) + ': ' + msg)
+                ##print('WARNING ' +str(code) + ': ' + msg)
 
     conn.commit()
 
@@ -289,6 +308,14 @@ def collectFromCheckpointsCsv(conn, csvfile, race, year):
                 race="Halvmaraton"
             elif row[0]=="Öppet fjäll":
                 race="Öppet Fjäll"
+
+            # xxrace = race
+            # if race in ("Bydalen Fjällmaraton", "Bydalen Fjällmaraton 22K", "Bydalen Fjällmaraton 50K"):
+            #     if int(row[1]) == 50000:
+            #         race = "Bydalen Fjällmaraton 50K"
+            #     else :
+            #         race = "Bydalen Fjällmaraton 22K"
+            # xxxrace = race
             bib = row[2]
             email = row[7]
             location = checklocation(race, row[9])[0]
@@ -307,7 +334,7 @@ def collectFromCheckpointsCsv(conn, csvfile, race, year):
             c.execute(sql,params);
             res = c.fetchone()
             if res == None :
-                print(res)
+                print("Can't find parent in Results")
                 print(str(bib) + " " + race + " " + str(year) + "["+ str(row[3]) + " " + str(row[4]) + "]")
                 continue
             _id = res['id']
@@ -322,27 +349,33 @@ def collectFromCheckpointsCsv(conn, csvfile, race, year):
             elif res_email != email :
                 print("WARNING db and csv email don't match ["+res_email+"] != ["+email+"]")
 
-            sql = ''' SELECT id
+            sql = ''' SELECT id, fakeflag
                         FROM checkpoints
                         WHERE results_id = %s AND name = %s'''
             params = (_id, "start")
             c.execute(sql,params);
             res = c.fetchone()
-            #print(res)
-            if res==None:
-                sql = '''INSERT INTO checkpoints (results_id, name, timeofday, timepassed, distance, location_order)
-                        VALUES (%s,%s,%s,%s,%s,%s)'''
-                params = (_id, "start", starttime, "00:00:00", 0, 0)
-                try:
-                    c.execute(sql , params)
 
-                except pymysql.err.InternalError as e:
-                    code, msg = e.args
-                    print('WARNING ' +str(code) + ': ' + msg)
-
-                except pymysql.err.IntegrityError as e:
-                    code, msg = e.args
-                    print('WARNING ' +str(code) + ': ' + msg)
+            fakeflag = 0;
+            ##print('FAKEFLAG' + str(fakeflag))
+            # if res!=None:
+            #     fakeflag = res['fakeflag']
+            #     fake_id = res['id']
+            ##print('FAKEFLAG' + str(fakeflag))
+            # if res==None:
+            #     sql = '''INSERT INTO checkpoints (results_id, name, timeofday, timepassed, distance, location_order, fakeflag)
+            #             VALUES (%s,%s,%s,%s,%s,%s,%s)'''
+            #     params = (_id, "start", starttime, "00:00:00", 0, 0, 1)
+            #     try:
+            #         c.execute(sql , params)
+            #
+            #     except pymysql.err.InternalError as e:
+            #         code, msg = e.args
+            #         print('WARNING ' +str(code) + ': ' + msg)
+            #
+            #     except pymysql.err.IntegrityError as e:
+            #         code, msg = e.args
+            #         print('WARNING ' +str(code) + ': ' + msg)
 
             timetemp = time.split(":")
             timetempsum = int(timetemp[0])*60*60 + int(timetemp[1])*60 + int(timetemp[2])
@@ -353,10 +386,15 @@ def collectFromCheckpointsCsv(conn, csvfile, race, year):
             ##   For every checkpoint that will be passed under one hour
             if race == "Copper Trail" and int(timetemp[0]) > 10 :
                 time = "00:" + timetemp[0] + ":" + timetemp[1]
-
-            sql = '''INSERT INTO checkpoints (results_id, name, timeofday, timepassed, distance, location_order)
-                     VALUES (%s,%s,%s,%s,%s,%s)'''
-            params = (_id, location, timeofday, time, distance, location_order)
+            if fakeflag :
+                sql = '''UPDATE checkpoints
+                            SET timeofday = %s, timepassed = %s, distance = %s, location_order = %s, fakeflag = %s
+                            WHERE results_id = %s AND name = %s'''
+                params = (timeofday, time, distance, location_order, fakeflag, _id, location)
+            else :
+                sql = '''INSERT INTO checkpoints (results_id, name, timeofday, timepassed, distance, location_order, fakeflag)
+                         VALUES (%s,%s,%s,%s,%s,%s, 0)'''
+                params = (_id, location, timeofday, time, distance, location_order)
 
             try:
                 c.execute(sql , params)
@@ -398,6 +436,7 @@ if __name__ == '__main__':
     ##############################################
     if __BYDALEN__ :
         race = 'Bydalen Fjällmaraton'
+        print("start: " + race)
 
         #Results Bydalen 2017
         year=2017
@@ -420,21 +459,27 @@ if __name__ == '__main__':
         x_gender="M"
         x_class="Män"
         #22K
+        #race = 'Bydalen Fjällmaraton 22K'
         x_stage="22K"
         collectFromBydalen14Csv(conn, 'csv/Bydalen/2014_22km_herrar1.csv', race, year, x_stage, x_gender, x_class)
         #50K
+        #race = 'Bydalen Fjällmaraton 50K'
         x_stage="50K"
         collectFromBydalen14Csv(conn, 'csv/Bydalen/2014_50km_herrar5.csv', race, year, x_stage, x_gender, x_class)
         #Damer
         x_gender="F"
         x_class="Kvinnor"
         #22K
+        #race = 'Bydalen Fjällmaraton 22K'
         x_stage="22K"
         collectFromBydalen14Csv(conn, 'csv/Bydalen/2014_22km_damer2.csv', race, year, x_stage, x_gender, x_class)
         #50K
+        #race = 'Bydalen Fjällmaraton 50K'
         x_stage="50K"
         collectFromBydalen14Csv(conn, 'csv/Bydalen/2014_50km_damer3.csv', race, year, x_stage, x_gender, x_class)
 
+        #race = 'Bydalen Fjällmaraton'
+        print("end: " + race)
     ##############################################
     ##                                          ##
     ##  27K                                     ##
@@ -443,6 +488,7 @@ if __name__ == '__main__':
 
     if __27K__ :
         race = '27k'
+        print("start: " + race)
 
         #Results 27K 2017
         year=2017
@@ -453,7 +499,7 @@ if __name__ == '__main__':
         year=2016
         collectFromResultatCsv(conn, 'csv/27K/27K_2016_resultat.csv', race, year)
         collectFromCheckpointsCsv(conn, 'csv/27K/27K_2016_mellantider.csv', race, year)
-
+        print("end: " + race)
     ##############################################
     ##                                          ##
     ##  Fjällmaraton                            ##
@@ -461,6 +507,7 @@ if __name__ == '__main__':
     ##############################################
 
     if __FJALLMARATON__ :
+        print("start: " + race)
         race = 'Fjällmaraton'
 
         #Results Fjällmaraton 2017
@@ -478,7 +525,7 @@ if __name__ == '__main__':
         year=2015
         collectFromResultatCsv(conn, 'csv/Fjallmaraton/Fjallmaraton_2015_resultat.csv', race, year)
         collectFromCheckpointsCsv(conn, 'csv/Fjallmaraton/Fjallmaraton_2015_mellantider.csv', race, year)
-
+        print("end: " + race)
     ##############################################
     ##                                          ##
     ##  Kvartsmaraton                           ##
@@ -487,6 +534,8 @@ if __name__ == '__main__':
 
     if __KVARTSMARATON__ :
         race = 'Kvartsmaraton'
+        print("start: " + race)
+
         year=2017
         collectFromResultatCsv(conn, 'csv/Kvartsmaraton/Kvartsmaraton_2017_resultat.csv', race, year)
         collectFromCheckpointsCsv(conn, 'csv/Kvartsmaraton/Kvartsmaraton_2017_mellantider.csv', race, year)
@@ -494,23 +543,30 @@ if __name__ == '__main__':
         year=2016
         collectFromResultatCsv(conn, 'csv/Kvartsmaraton/Kvartsmaraton_2016_resultat.csv', race, year)
         collectFromCheckpointsCsv(conn, 'csv/Kvartsmaraton/Kvartsmaraton_2016_mellantider.csv', race, year)
+        print("end: " + race)
 
     if __VALLISTERUNT__ :
         race = 'Välliste Runt'
+        print("start: " + race)
+
         year=2017
         collectFromResultatCsv(conn, 'csv/VallisteRunt/VallisteRunt_2017_resultat.csv', race, year)
         collectFromCheckpointsCsv(conn, 'csv/VallisteRunt/VallisteRunt_2017_mellantider.csv', race, year)
+        print("end: " + race)
 
     if __COPPERTRAIL__ :
         race = 'Copper Trail'
+        print("start: " + race)
 
         #Results Copper Trail 2017
         year=2017
         collectFromResultatCsv(conn, 'csv/CopperTrail/CopperTrail_2017_resultat.csv', race, year)
         collectFromCheckpointsCsv(conn, 'csv/CopperTrail/CopperTrail_2017_mellantider.csv', race, year)
+        print("end: " + race)
 
     if __VERTICALK__ :
         race = 'Vertical K'
+        print("start: " + race)
 
         year=2017
         collectFromResultatCsv(conn, 'csv/VerticalK/VerticalK_2017_resultat.csv', race, year)
@@ -519,9 +575,11 @@ if __name__ == '__main__':
         year=2016
         collectFromResultatCsv(conn, 'csv/VerticalK/VerticalK_2016_resultat.csv', race, year)
         collectFromCheckpointsCsv(conn, 'csv/VerticalK/VerticalK_2016_mellantider.csv', race, year)
+        print("end: " + race)
 
     if __OPPETFJALL__ :
         race = 'Öppet Fjäll'
+        print("start: " + race)
 
         year=2017
         collectFromResultatCsv(conn, 'csv/OppetFjall/OppetFjall_2017_resultat.csv', race, year)
@@ -534,4 +592,5 @@ if __name__ == '__main__':
         year=2015
         collectFromResultatCsv(conn, 'csv/OppetFjall/OppetFjall_2015_resultat.csv', race, year)
         collectFromCheckpointsCsv(conn, 'csv/OppetFjall/OppetFjall_2015_mellantider.csv', race, year)
+        print("end: " + race)
     conn.close()

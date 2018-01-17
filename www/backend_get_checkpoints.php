@@ -17,6 +17,10 @@ if (isset($_GET['race'])){
       $race = "27K";
       break;
     }
+    case "Salomon 27K": {
+      $race = "27K";
+      break;
+    }
     case "oppet-fjall": {
       $race = "Öppet Fjäll";
       break;
@@ -37,8 +41,12 @@ if (isset($_GET['race'])){
       $race = "Vertical K";
       break;
     }
-    case "bydalsfjallen": {
-      $race = "Bydalen Fjällmaraton";
+    case "bydalsfjallen22": {
+      $race = "Bydalen Fjällmaraton 22K";
+      break;
+    }
+    case "bydalsfjallen50": {
+      $race = "Bydalen Fjällmaraton 50K";
       break;
     }
     default: {
@@ -59,12 +67,12 @@ if (isset($_GET['t'])){
 
 $output = array();
 
-$query = "SELECT DISTINCT c.name AS checkpoint, c.distance as distance
+$query = "SELECT DISTINCT c.name AS name, c.location_order as location_order
 FROM checkpoints c INNER JOIN results r
 ON c.results_id = r.id
 WHERE
 r.race = '{$race}'
-ORDER BY distance";
+ORDER BY location_order";
 
 $sth = mysqli_query($conn, $query);
 

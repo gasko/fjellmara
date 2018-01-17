@@ -17,6 +17,10 @@ if (isset($_GET['race'])){
       $race = "27K";
       break;
     }
+    case "Salomon 27K": {
+      $race = "27K";
+      break;
+    }
     case "oppet-fjall": {
       $race = "Öppet Fjäll";
       break;
@@ -37,8 +41,12 @@ if (isset($_GET['race'])){
       $race = "Vertical K";
       break;
     }
-    case "bydalsfjallen": {
-      $race = "Bydalen Fjällmaraton";
+    case "bydalsfjallen22": {
+      $race = "Bydalen Fjällmaraton 22K";
+      break;
+    }
+    case "bydalsfjallen50": {
+      $race = "Bydalen Fjällmaraton 50K";
       break;
     }
     default: {
