@@ -11,9 +11,9 @@ def checktime(time):
     return time
 
 def checkstage(stage):
-    if stage in ("50K", "Bydalen 50 km", "50km"):
+    if stage in ("50K", "Bydalen 50 km", "50km", "50Km"):
         return "50K"
-    elif stage in ("22K", "Bydalen 22 km", "22km"):
+    elif stage in ("22K", "Bydalen 22 km", "22km", "22Km", "Bydalen 22 KM"):
         return "22K"
 
 def checkclass(xclass):
@@ -97,7 +97,7 @@ def checklocation(race, location):
         elif  location in ("Mål"):
             return ["finnish", 3]
 
-    if race == "Bydalen Fjällmaraton":
+    if race == "Bydalen Fjällmaraton 50K":
         if location in ("start", "Start reg"):
             return ["start", 0]
         elif location in ("Mårdsundsbodarna", "Mårdsundsbodarna "):
@@ -115,24 +115,24 @@ def checklocation(race, location):
         elif  location in ("Mål"):
             return ["finnish", 7]
 
-    # if race == "Bydalen Fjällmaraton 22K":
-    #     if location in ("start", "Start reg"):
-    #         return ["start", 0]
-    #     elif location in ("Mårdsundsbodarna", "Mårdsundsbodarna "):
-    #         return ["Mårdsundsbodarna", 1]
-    #     elif location in ("Mårdsundsbodarna"):
-    #         return ["Mårdsundsbodarna",2]
-    #     elif location in ("Bydalen"):
-    #         return ["Bydalen", 3]
-    #     elif location in ("Förvarning"):
-    #         return ["pre finnish", 4]
-    #     elif  location in ("Mål"):
-    #         return ["finnish", 5]
+    if race == "Bydalen Fjällmaraton 22K":
+        if location in ("start", "Start reg"):
+            return ["start", 0]
+        elif location in ("Mårdsundsbodarna", "Mårdsundsbodarna "):
+            return ["Mårdsundsbodarna", 1]
+        elif location in ("Mårdsundsbodarna"):
+            return ["Mårdsundsbodarna",2]
+        elif location in ("Bydalen"):
+            return ["Bydalen", 3]
+        elif location in ("Förvarning"):
+            return ["pre finnish", 4]
+        elif  location in ("Mål"):
+            return ["finnish", 5]
 
     if race == "Halvmaraton":
         return [location,-1]
 
-    print("ERROR couldn't find checkpoint for [" + race + "-" + location + "]")
+    print("ERROR couldn't find checkpoint for: race[" + race + "] checkpoint[" + location + "]")
     sys.exit(0)
 
 
@@ -144,7 +144,7 @@ def printRow(row):
     print("row[ ", end='')
     i=0
     for cell in row:
-        print("cell["+str(j)+"] = \"" + cell + "\" ", end='')
+        print("cell["+str(i)+"] = \"" + cell + "\" ", end='')
         i += 1
     print(" ]")
 
@@ -254,12 +254,19 @@ def collectFromBydalen14Csv(conn, csvfile, race, year, stage, gender, xclass):
 
 ## Collect DATA from the *_resultat.csv
 def collectFromResultatCsv(conn, csvfile, race, year):
+    CONSTANT_RACE = race;
     c = conn.cursor()
     with open(csvfile, newline='', encoding='utf-8') as mcsvfile :
         reader = csv.reader(mcsvfile, delimiter=';', dialect="excel")
-        i = 0;
+
         next(reader)
         for row in reader:
+# [0]Bib          [1]Firstname      [2]surname          [3]NameFormatted
+# [4]Gender       [5]Birthdate      [6]City             [7]NationIOC
+# [8]Club	      [9]Team	        [10]ClubTeamFormatted	[11]EventName
+# [12]ClassName	  [13]GroupName	    [14]RaceName	    [15]PointName
+# [16]Status	  [17]Communique	[18]TimeFormatted	[19]TimeSmoothedFormatted
+# [29]Rank	      [21]DiffTime	    [22]StartingTimeFormatted	[23]CODE
             birthdate = getCorrectDateFormat(row[5])
             time = checktime(row[18])
             stage = checkstage(row[14])
@@ -270,13 +277,17 @@ def collectFromResultatCsv(conn, csvfile, race, year):
             elif row[14]=="Öppet fjäll":
                         race="Öppet Fjäll"
 
-            xclass = checkclass(row[12])
+            if CONSTANT_RACE == "Bydalen Fjällmaraton":
+                if stage == "50K":
+                    race = "Bydalen Fjällmaraton 50K"
+                elif stage == "22K":
+                    race = "Bydalen Fjällmaraton 22K"
+                else:
+                    print("Bydalen : problem")
+                    printRow(row)
+                    sys.exit()
 
-            # if race in ("Bydalen Fjällmaraton", "Bydalen Fjällmaraton 22K", "Bydalen Fjällmaraton 50K"):
-            #     if stage == "50K":
-            #         race = "Bydalen Fjällmaraton 50K"
-            #     elif stage == "22K":
-            #         race = "Bydalen Fjällmaraton 22K"
+            xclass = checkclass(row[12])
 
             sql = '''INSERT INTO results (race, year, bib, firstname, surname, gender, birthdate, city, nation, club, class, stage, status, time)
                              VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
@@ -296,12 +307,14 @@ def collectFromResultatCsv(conn, csvfile, race, year):
 
 ## Collect DATA from the *_mellantider.csv
 def collectFromCheckpointsCsv(conn, csvfile, race, year):
+    CONSTANT_RACE = race;
     c = conn.cursor()
     with open(csvfile, newline='', encoding='utf-8') as csvfile :
         reader = csv.reader(csvfile, delimiter=';', dialect="excel")
         i = 0;
         next(reader)
         for row in reader:
+
             if row[0]=="Kvartsmaraton":
                 race="Kvartsmaraton"
             elif row[0]=="Halvmaraton":
@@ -309,23 +322,24 @@ def collectFromCheckpointsCsv(conn, csvfile, race, year):
             elif row[0]=="Öppet fjäll":
                 race="Öppet Fjäll"
 
-            # xxrace = race
-            # if race in ("Bydalen Fjällmaraton", "Bydalen Fjällmaraton 22K", "Bydalen Fjällmaraton 50K"):
-            #     if int(row[1]) == 50000:
-            #         race = "Bydalen Fjällmaraton 50K"
-            #     else :
-            #         race = "Bydalen Fjällmaraton 22K"
-            # xxxrace = race
             bib = row[2]
             email = row[7]
-            location = checklocation(race, row[9])[0]
-            location_order = checklocation(race, row[9])[1]
             timeofday = row[13]
             time = row[14]
             distance = row[10]
             starttime = row[12]
 
-            c = conn.cursor()
+            if CONSTANT_RACE == "Bydalen Fjällmaraton":
+                if int(row[1]) == 50000:
+                    race = "Bydalen Fjällmaraton 50K"
+                elif int(row[1]) == 22000:
+                    race = "Bydalen Fjällmaraton 22K"
+                else :
+                    print("what the heck(" + str(row[1]) + ")")
+                    sys.exit()
+
+            location = checklocation(race, row[9])[0]
+            location_order = checklocation(race, row[9])[1]
 
             sql = ''' SELECT id, email
                         FROM results
@@ -333,6 +347,7 @@ def collectFromCheckpointsCsv(conn, csvfile, race, year):
             params = (bib, race, year)
             c.execute(sql,params);
             res = c.fetchone()
+
             if res == None :
                 print("Can't find parent in Results")
                 print(str(bib) + " " + race + " " + str(year) + "["+ str(row[3]) + " " + str(row[4]) + "]")
@@ -409,7 +424,33 @@ def collectFromCheckpointsCsv(conn, csvfile, race, year):
 
         conn.commit()
 
+def truncate_db(conn):
+    c = conn.cursor()
+    sql = '''TRUNCATE TABLE results'''
+    try:
+        c.execute(sql)
 
+    except pymysql.err.InternalError as e:
+        code, msg = e.args
+        print('WARNING ' +str(code) + ': ' + msg)
+
+    except pymysql.err.IntegrityError as e:
+        code, msg = e.args
+        print('WARNING ' +str(code) + ': ' + msg)
+
+
+    sql = '''TRUNCATE TABLE checkpoints'''
+
+    try:
+        c.execute(sql)
+
+    except pymysql.err.InternalError as e:
+        code, msg = e.args
+        print('WARNING ' +str(code) + ': ' + msg)
+
+    except pymysql.err.IntegrityError as e:
+        code, msg = e.args
+        print('WARNING ' +str(code) + ': ' + msg)
 
 if __name__ == '__main__':
     conn = pymysql.connect(host='localhost',
@@ -420,15 +461,20 @@ if __name__ == '__main__':
                              cursorclass=pymysql.cursors.DictCursor)
 
 
-    __BYDALEN__ = 1
-    __27K__ = 1
-    __FJALLMARATON__ = 1
-    __KVARTSMARATON__ = 1
-    __VALLISTERUNT__ = 1
-    __COPPERTRAIL__ = 1
-    __VERTICALK__ = 1
-    __OPPETFJALL__ = 1
+    __TRUNCATE__ = 1
 
+    __BYDALEN__ = 1
+    __27K__ = 0
+    __FJALLMARATON__ = 0
+    __KVARTSMARATON__ = 0
+    __VALLISTERUNT__ = 0
+    __COPPERTRAIL__ = 0
+    __VERTICALK__ = 0
+    __OPPETFJALL__ = 0
+
+
+    if __TRUNCATE__ :
+        truncate_db(conn)
     ##############################################
     ##                                          ##
     ##  Bydalen                                 ##
@@ -459,22 +505,22 @@ if __name__ == '__main__':
         x_gender="M"
         x_class="Män"
         #22K
-        #race = 'Bydalen Fjällmaraton 22K'
+        race = 'Bydalen Fjällmaraton 22K'
         x_stage="22K"
         collectFromBydalen14Csv(conn, 'csv/Bydalen/2014_22km_herrar1.csv', race, year, x_stage, x_gender, x_class)
         #50K
-        #race = 'Bydalen Fjällmaraton 50K'
+        race = 'Bydalen Fjällmaraton 50K'
         x_stage="50K"
         collectFromBydalen14Csv(conn, 'csv/Bydalen/2014_50km_herrar5.csv', race, year, x_stage, x_gender, x_class)
         #Damer
         x_gender="F"
         x_class="Kvinnor"
         #22K
-        #race = 'Bydalen Fjällmaraton 22K'
+        race = 'Bydalen Fjällmaraton 22K'
         x_stage="22K"
         collectFromBydalen14Csv(conn, 'csv/Bydalen/2014_22km_damer2.csv', race, year, x_stage, x_gender, x_class)
         #50K
-        #race = 'Bydalen Fjällmaraton 50K'
+        race = 'Bydalen Fjällmaraton 50K'
         x_stage="50K"
         collectFromBydalen14Csv(conn, 'csv/Bydalen/2014_50km_damer3.csv', race, year, x_stage, x_gender, x_class)
 

@@ -171,7 +171,7 @@ export class ChartComponent implements OnInit, AfterViewInit {
   }
 
   getMinutes(time: string): number {
-    let splitted : number = time.split(':');
+    let splitted : number =  time.split(':');
     return +splitted[0] * 60 + +splitted[1];
   }
 
