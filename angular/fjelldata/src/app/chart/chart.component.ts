@@ -117,8 +117,8 @@ export class ChartComponent implements OnInit, AfterViewInit {
       this.dataPassings = [];
       this.dataNormal = [];
       this.chartData = [
-        { data: this.dataPassings, label: 'Passeringar'},
-        { data: this.dataNormal, label: 'Normalfördelning'},
+        { data: this.dataPassings, label: 'Passeringar', pointRadius: 0},
+        { data: this.dataNormal, label: 'Normalfördelning', pointRadius: 0},
       ];
       console.log(race);
       this.fetchStats(race,checkpoint);

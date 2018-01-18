@@ -51,3 +51,8 @@ ul.c_nav a {
 .c_nav .active {
     background-color: #4CAF50;
 }
+
+.selected a {
+  background-color: #555 !important;
+  color: white;
+}

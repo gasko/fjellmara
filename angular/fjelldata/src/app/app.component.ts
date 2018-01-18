@@ -12,10 +12,14 @@ import { Component, AfterViewInit } from '@angular/core';
 // }
 
 export class AppComponent implements AfterViewInit {
-       // constructor(private elementRef: ElementRef){
-       //
-       // }
+
+      selectedRace:string = 'home';
+
        ngAfterViewInit(){
         // this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = 'yourColor';
+      }
+
+      onSelect(race: string): void {
+        this.selectedRace = race;
       }
    }

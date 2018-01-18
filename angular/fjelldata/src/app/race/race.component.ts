@@ -36,6 +36,10 @@ export class RaceComponent implements OnInit {
 
   }
 
+  onSelect(checkpoint: string): void {
+    this.selectedCheckpoint = checkpoint;
+  }
+
   getRaceName(): string {
     let alias = this.getAlias();
     switch(alias) {

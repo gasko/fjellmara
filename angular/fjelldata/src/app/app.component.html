@@ -3,16 +3,36 @@
 <img id="logo" [src]="'/assets/fjallstatistik.png'" alt="Simpla Admin logo" />
 <nav>
   <ul class="nav">
-    <li><a routerLink="/races">home</a></li>
-    <li class="sponsor-fjallmara"><a routerLink="/race/fjallmara">Fjällmaraton</a></li>
-    <li class="sponsor-27k"><a routerLink="/race/27k">Salomon 27K</a></li>
-    <li><a routerLink="/race/valliste">Välliste Runt</a></li>
-    <li class="sponsor-vertical"><a routerLink="/race/verticalk">Vertical K</a></li>
-    <li class="sponsor-copper"><a routerLink="/race/copper-trail">Copper Trail</a></li>
-    <li class="sponsor-kvartsmara"><a routerLink="/race/kvartsmaraton">kvartsmaraton</a></li>
-    <li class="sponsor-oppet"><a routerLink="/race/oppet-fjall">Öppet fjäll</a></li>
-    <li class="sponsor-bydalen"><a routerLink="/race/bydalsfjallen22">Bydalsfjällen 22</a></li>
-    <li class="sponsor-bydalen"><a routerLink="/race/bydalsfjallen50">Bydalsfjällen 50</a></li>
+    <li [class.selected]="'home' === selectedRace" (click)="onSelect('home')">
+      <a routerLink="/races">home</a>
+    </li>
+    <li [class.selected]="'fjallmara' === selectedRace" class="sponsor-fjallmara" (click)="onSelect('fjallmara')">
+      <a routerLink="/race/fjallmara">Fjällmaraton</a>
+    </li>
+    <li [class.selected]="'27k' === selectedRace" class="sponsor-27k" (click)="onSelect('27k')">
+      <a routerLink="/race/27k">Salomon 27K</a>
+    </li>
+    <li [class.selected]="'valliste' === selectedRace" (click)="onSelect('valliste')">
+      <a routerLink="/race/valliste">Välliste Runt</a>
+    </li>
+    <li [class.selected]="'verticalk' === selectedRace" class="sponsor-vertical" (click)="onSelect('verticalk')">
+      <a routerLink="/race/verticalk">Vertical K</a>
+    </li>
+    <li [class.selected]="'copper-trail' === selectedRace" class="sponsor-copper" (click)="onSelect('copper-trail')">
+      <a routerLink="/race/copper-trail">Copper Trail</a>
+    </li>
+    <li [class.selected]="'kvartsmaraton' === selectedRace" class="sponsor-kvartsmara" (click)="onSelect('kvartsmaraton')">
+      <a routerLink="/race/kvartsmaraton">kvartsmaraton</a>
+    </li>
+    <li [class.selected]="'oppet-fjall' === selectedRace" class="sponsor-oppet" (click)="onSelect('oppet-fjall')">
+      <a routerLink="/race/oppet-fjall">Öppet fjäll</a>
+    </li>
+    <li [class.selected]="'bydalsfjallen22' === selectedRace" class="sponsor-bydalen" (click)="onSelect('bydalsfjallen22')">
+      <a routerLink="/race/bydalsfjallen22">Bydalsfjällen 22</a>
+    </li>
+    <li [class.selected]="'bydalsfjallen50' === selectedRace" class="sponsor-bydalen" (click)="onSelect('bydalsfjallen50')">
+      <a routerLink="/race/bydalsfjallen50">Bydalsfjällen 50</a>
+    </li>
   </ul>
 
 <br /><br />
