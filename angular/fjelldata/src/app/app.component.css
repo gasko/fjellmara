@@ -62,7 +62,7 @@ ul.nav a {
     background-position: 0.8em !important;
     padding-left: 3.5em;
 }
-.nav li.sponsor-vertical a {
+.nav li.sponsor-verticalk a {
     background-image: url('/assets/ppverticalk_neg.svg') !important;
     background-repeat: no-repeat !important;
     padding-left: 3.25em;
@@ -70,7 +70,7 @@ ul.nav a {
     background-position: 0.8em !important;
     padding-left: 3.5em;
 }
-.nav li.sponsor-copper a {
+.nav li.sponsor-copper-trail a {
     background-image: url('/assets/copperhill_neg.png') !important;
     background-repeat: no-repeat !important;
     padding-left: 3.25em;
@@ -86,7 +86,7 @@ ul.nav a {
     background-position: 0.8em !important;
     padding-left: 3.5em;
 }
-.nav li.sponsor-oppet a {
+.nav li.sponsor-oppet-fjall a {
     background-image: url('/assets/lundhags_neg.png') !important;
     background-repeat: no-repeat !important;
     padding-left: 3.25em;
@@ -94,7 +94,7 @@ ul.nav a {
     background-position: 0.1em !important;
     padding-left: 3.5em;
 }
-.nav li.sponsor-bydalen a {
+.nav li.sponsor-bydalsfjallen22 a, .nav li.sponsor-bydalsfjallen50 a {
     background-image: url('/assets/buff_neg.png') !important;
     background-repeat: no-repeat !important;
     padding-left: 3.25em;

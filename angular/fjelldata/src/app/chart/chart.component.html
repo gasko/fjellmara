@@ -1,9 +1,12 @@
-<ul class="statlist">
-  <li><div class="label">Antal löpare:</div> {{v_totalrunners}} </li>
-  <li><div class="label">Snabbaste man:</div> {{v_fastest_mtime}} - {{v_fastest_mtime_name}} ({{v_fastest_mtime_year}})</li>
-  <li><div class="label">Snabbaste dam:</div> {{v_fastest_ftime}} - {{v_fastest_ftime_name}} ({{v_fastest_ftime_year}})</li>
-  <li><div class="label">medeltid:</div> {{v_avg_time}}</li>
-  <li><div class="label">Långsammaste tid:</div> {{v_slowest_time}}</li>
+<ul *ngIf="rr" class="statlist">
+  <li><div class="label">Antal löpare:</div> {{rr.tot_runners}} </li>
+  <li><div class="label">Snabbaste man:</div> {{rr.fastest_runners_m[0].time}} - {{rr.fastest_runners_m[0].firstname}} {{rr.fastest_runners_m[0].surname}} ({{rr.fastest_runners_m[0].year}}) <div *ngIf="rr.fastest_runners_m[0].nation2" class="flag" [ngStyle]="{'background-image': 'url(/assets/flags/'+rr.fastest_runners_m[0].nation2.toLowerCase() +'.svg)'}"></div>{{rr.fastest_runners_m[0].club}}</li>
+  <li><div class="label">Snabbaste man:</div> {{rr.fastest_runners_f[0].time}} - {{rr.fastest_runners_f[0].firstname}} {{rr.fastest_runners_f[0].surname}} ({{rr.fastest_runners_f[0].year}}) <div *ngIf="rr.fastest_runners_m[0].nation2" class="flag" [ngStyle]="{'background-image': 'url(/assets/flags/'+rr.fastest_runners_f[0].nation2.toLowerCase() +'.svg)'}"></div>{{rr.fastest_runners_f[0].club}}</li>
+  <li><div class="label">medeltid:</div> {{rr.avg_time}}</li>
+  <li><div class="label">Långsammaste tid:</div> {{rr.slowest_time}}</li>
+  <li *ngFor="let runner of rr.fastest_runners_m">
+    <div class="label">Snabbaste man:</div> {{runner.time}} - {{runner.firstname}} {{runner.surname}} ({{runner.year}}) <div *ngIf="runner.nation2"class="flag" [ngStyle]="{'background-image': 'url(/assets/flags/'+runner.nation2.toLowerCase() +'.svg)'}"></div>{{runner.club}}
+  </li>
 </ul>
 
 <div class="racechart" style="width: 100%;">

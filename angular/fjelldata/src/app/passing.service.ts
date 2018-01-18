@@ -53,10 +53,10 @@ export class PassingService {
     return this.http.get<Passing[]>(passingsUrl);
   }
 
-  getStats(race:string, checkpoint:string): Observable<CheckpointStat[]> {
+  getStats(race:string, checkpoint:string): Observable<CheckpointStat> {
     this.messageService.add('PassingService: fetched stats');
     let fetchUrl = 'http://localhost/fjellmara/backend_get_checkpoint_stat.php?race='+race+'&checkpoint='+checkpoint;
-    return this.http.get<CheckpointStat[]>(fetchUrl);
+    return this.http.get<CheckpointStat>(fetchUrl);
   }
 
   getCheckpoints(race:string): Observable<Checkpoint[]> {

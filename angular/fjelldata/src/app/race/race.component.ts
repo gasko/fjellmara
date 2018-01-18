@@ -15,7 +15,7 @@ import { Checkpoint } from '../checkpoint';
 export class RaceComponent implements OnInit {
 
   checkpoints:any;
-  selectedCheckpoint: Checkpoint;
+  selectedCheckpoint: string;
   constructor(
     private route: ActivatedRoute,
     private passingService: PassingService,

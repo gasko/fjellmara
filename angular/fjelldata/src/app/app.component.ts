@@ -1,25 +1,23 @@
-import { Component, AfterViewInit } from '@angular/core';
-
-
+import { Component, OnInit } from '@angular/core';
+import { MenuItem, RACE_MENU } from './menuitem';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-// export class AppComponent {
-//   title = 'Fjelldata';
-// }
 
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements OnInit {
 
-      selectedRace:string = 'home';
+  menuitems:MenuItem[] = RACE_MENU;
 
-       ngAfterViewInit(){
-        // this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = 'yourColor';
-      }
+  selectedRace:string = 'home';
 
-      onSelect(race: string): void {
-        this.selectedRace = race;
-      }
-   }
+  ngOnInit(): void {
+    // this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = 'yourColor';
+  }
+
+  onSelect(race:string): void {
+    this.selectedRace = race;
+  }
+}

@@ -166,34 +166,51 @@ function get_stddev($conn, $race, $checkpoint){
   return $r["stddevi"];
 }
 
-function get_fastest_time($conn, $race, $checkpoint, $gender){
+function get_fastest_time($conn, $race, $checkpoint){
   $query =
     " SELECT MIN(TIME_TO_SEC(`timepassed`)) AS mtime
       FROM checkpoints c INNER JOIN results r
         ON c.results_id = r.id
         WHERE
-          r.gender = '{$gender}' AND
           c.name = '{$checkpoint}' AND
           r.race = '{$race}' AND
           r.status = 'TIME'";
   $sth = mysqli_query($conn, $query);
-  $r1 = mysqli_fetch_assoc($sth);
+  $r = mysqli_fetch_assoc($sth);
 
-  $temp = sec2time($r1["mtime"]);
+  return $r["mtime"];
+}
 
+function get_fastest_runners($conn, $race, $checkpoint, $gender){
   $query =
-    " SELECT firstname, surname, year
-      FROM checkpoints c INNER JOIN results r
+    "SELECT
+      timepassed AS time,
+      firstname, surname, year,
+      code AS nation2,
+      countrycode AS nation3,
+      countryname AS nation_name,
+      club
+      FROM checkpoints c
+      INNER JOIN results r
         ON c.results_id = r.id
+      LEFT JOIN country co
+        ON r.nation = co.countrycode
         WHERE
           r.gender = '{$gender}' AND
           c.name = '{$checkpoint}' AND
           r.race = '{$race}' AND
-          c.timepassed = '{$temp}'";
-  $sth = mysqli_query($conn, $query);
-  $r2 = mysqli_fetch_assoc($sth);
+          r.status = 'TIME' AND
+          c.timepassed IS NOT NULL
+    ORDER BY TIME_TO_SEC(`timepassed`) asc
+    LIMIT 3";
 
-  return [$r1["mtime"], $r2["firstname"] . " " . $r2["surname"], $r2["year"]];
+  $sth = mysqli_query($conn, $query);
+  $rows = array();
+  while($r = mysqli_fetch_assoc($sth)) {
+    $rows[] = $r;
+  }
+  
+  return $rows;
 }
 
 function get_slowest_time($conn, $race, $checkpoint){
@@ -256,27 +273,24 @@ function echo_all($conn, $race, $checkpoint){
  *
  */
 $stddev = get_stddev($conn, $race, $checkpoint);
-$avgtime = get_avgtime($conn, $race, $checkpoint);
-$fastest_mtime = get_fastest_time($conn, $race, $checkpoint, 'M');
-$fastest_ftime = get_fastest_time($conn, $race, $checkpoint, 'F');
-$slowesttime = get_slowest_time($conn, $race, $checkpoint);
+$avg_time = get_avgtime($conn, $race, $checkpoint);
+$slowest_time = get_slowest_time($conn, $race, $checkpoint);
+$fastest_time = get_fastest_time($conn, $race, $checkpoint);
+$fastest_runners_m = get_fastest_runners($conn, $race, $checkpoint, 'M');
+$fastest_runners_f = get_fastest_runners($conn, $race, $checkpoint, 'F');
 $numberofraces = get_numberofraces($conn, $race, $checkpoint);
 $jsonret = array(
   'tot_runners' => get_allpass($conn, $race, $checkpoint),
-  'fastest_m_time' => sec2time($fastest_mtime[0]),
-  'fastest_m_time_sec' => $fastest_mtime[0],
-  'fastest_m_time_name' => $fastest_mtime[1],
-  'fastest_m_time_year' => $fastest_mtime[2],
-  'fastest_f_time' => sec2time($fastest_ftime[0]),
-  'fastest_f_time_sec' => $fastest_ftime[0],
-  'fastest_f_time_name' => $fastest_ftime[1],
-  'fastest_f_time_year' => $fastest_ftime[2],
-  'slowest_time' => sec2time($slowesttime),
-  'slowest_time_sec' => $slowesttime,
+  'fastest_runners_m' => $fastest_runners_m,
+  'fastest_runners_f' => $fastest_runners_f,
+  'fastest_time_sec' => sec2time($fastest_time),
+  'fastest_time_sec' => $fastest_time,
+  'slowest_time' => sec2time($slowest_time),
+  'slowest_time_sec' => $slowest_time,
   'stddev' => sec2time($stddev),
   'stddev_sec' => $stddev,
-  'avgtime' => sec2time($avgtime),
-  'avgtime_sec' => $avgtime,
+  'avg_time' => sec2time($avg_time),
+  'avg_time_sec' => $avg_time,
   'numberofraces' => $numberofraces,
   'passings' => get_passings($conn, $race, $checkpoint, $time_in_sec)
 );

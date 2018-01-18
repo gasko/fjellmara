@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ChartsModule } from 'ng2-charts';
 import { Passing } from '../passing';
+import { Runner } from '../runner';
 import { CheckpointStat } from '../checkpointStat';
 import { PassingService } from '../passing.service';
 
@@ -17,15 +18,7 @@ export class ChartComponent implements OnInit, AfterViewInit {
   chartLabels: any;
   chartData:any;
 
-  v_totalrunners : number;
-  v_fastest_mtime : string;
-  v_fastest_mtime_name : string;
-  v_fastest_mtime_year : number;
-  v_fastest_ftime : string;
-  v_fastest_ftime_name : string;
-  v_fastest_ftime_year : number;
-  v_slowest_time : string;
-  v_avg_time : string;
+  rr:CheckpointStat;
 
   alias: string;
   c_alias: string;
@@ -102,8 +95,6 @@ export class ChartComponent implements OnInit, AfterViewInit {
       ]
     }
   };
-
-
 
   constructor(
     private passingService: PassingService,
@@ -248,44 +239,20 @@ export class ChartComponent implements OnInit, AfterViewInit {
   fetchStats(race:string, checkpoint:string) {
     this.passingService.getStats(race,checkpoint).subscribe(stats =>
       {
-        this.v_totalrunners = stats['tot_runners'];
-        this.v_fastest_mtime = stats['fastest_m_time'];
-        this.v_fastest_mtime_name = stats['fastest_m_time_name'];
-        this.v_fastest_mtime_year = stats['fastest_m_time_year'];
-        this.v_fastest_ftime = stats['fastest_f_time'];
-        this.v_fastest_ftime_name = stats['fastest_f_time_name'];
-        this.v_fastest_ftime_year = stats['fastest_f_time_year'];
-        this.v_slowest_time = stats['slowest_time'];
-        this.v_avg_time = stats['avgtime'];
-        let nr_of_races = stats['numberofraces'];
-        console.log(stats);
-
-        let fastest_time_sec:number;
-
-        if (stats['fastest_m_time_sec'] <= stats['fastest_m_time_sec']){
-          fastest_time_sec = stats['fastest_m_time_sec'];
-        }
-        else {
-          fastest_time_sec = stats['fastest_f_time_sec'];
-        }
-
-        // console.log("fastest time sec: " + fastest_time_sec);
-        // console.log(fastest_time_sec-600);
-        // console.log((fastest_time_sec-600)/900);
-        //console.log(Math.trunc(fastest_time_sec-600)/900));
+        this.rr = stats;
 
         // 600 = 10min tidigare, 900 = 15*60 dela upp i 15min delar
         let tempx : number;
-        tempx = Math.trunc((fastest_time_sec-600)/900);
+        tempx = Math.trunc((stats.fastest_time_sec-600)/900);
 
         // starta på kvarten innan första tid
         let labelstart = this.minutesToHourMinute(tempx*15);
         // sluta på kvarten efter sista tid
         // sista tid får inte vara längre än 4xVinnartid
-        let slowest_temp = stats['slowest_time_sec'];
+        let slowest_temp = stats.slowest_time_sec;
 
-        if (slowest_temp > (4*fastest_time_sec)){
-          slowest_temp = 4*fastest_time_sec;
+        if (slowest_temp > (4*stats.fastest_time_sec)){
+          slowest_temp = 4*stats.fastest_time_sec;
         }
 
         tempx = Math.trunc(slowest_temp/900)+1;
@@ -293,18 +260,15 @@ export class ChartComponent implements OnInit, AfterViewInit {
 
         this.chartLabels = [];
         this.chartLabels = this.createLabels(labelstart,labelend);
-        let tempNormal:number[] = this.createPdfSerie(this.chartLabels, stats['avgtime_sec'], stats['stddev_sec']);
+        let tempNormal:number[] = this.createPdfSerie(this.chartLabels, stats.avg_time_sec, stats.stddev_sec);
         for (const x of tempNormal){
-          this.dataNormal.push(x * this.v_totalrunners / nr_of_races);
+          this.dataNormal.push(x * stats.tot_runners / stats.numberofraces);
         }
 
-        let pass:Passing[] = stats['passings'];
-        // console.log(pass);
-        // console.log("dataNormal" + this.dataNormal);
-        // console.log("passings: " + stats['passings'])
-        let tempPassings = this.getLabelSerie(this.chartLabels, pass);
+        //let pass:Passing[] = stats['passings'];
+        let tempPassings = this.getLabelSerie(this.chartLabels, stats.passings);
         for (const x of tempPassings){
-          this.dataPassings.push(x / this.labelminutes / nr_of_races);// == 0 ? x : x/5
+          this.dataPassings.push(x / this.labelminutes / stats.numberofraces);// == 0 ? x : x/5
         }
         // console.log("dataNormal" + this.dataPassings);
       });
