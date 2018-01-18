@@ -112,7 +112,8 @@ function get_passings($conn, $race, $checkpoint, $time_in_sec){
           ON c.results_id = r.id
           WHERE
           c.name = '{$checkpoint}' AND
-          r.race = '{$race}'
+          r.race = '{$race}' AND
+          c.timepassed IS NOT NULL
           GROUP BY TIME_TO_SEC(timepassed) DIV ${time_in_sec}, name ";
 
   $sth = mysqli_query($conn, $query);

@@ -1,7 +1,7 @@
 <!--<div *ngIf="alias">-->
 <h2>{{ alias | uppercase }}</h2>
 <ul class="c_nav">
-  <li *ngFor="let checkpoint of checkpoints" (click)="onSelect(race)" [class.selected]="checkpoint === selectedCheckpoint">
+  <li *ngFor="let checkpoint of checkpoints"  [class.selected]="checkpoint === selectedCheckpoint">
     <a routerLink="/race/{{alias}}/{{checkpoint.name}}">{{checkpoint.name}}</a>
   </li>
 </ul>

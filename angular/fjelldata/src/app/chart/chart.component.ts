@@ -15,6 +15,8 @@ export class ChartComponent implements OnInit, AfterViewInit {
   canvas: any;
   ctx: any;
   chartLabels: any;
+  chartData:any;
+
   v_totalrunners : number;
   v_fastest_mtime : string;
   v_fastest_mtime_name : string;
@@ -171,8 +173,8 @@ export class ChartComponent implements OnInit, AfterViewInit {
   }
 
   getMinutes(time: string): number {
-    let splitted : number =  time.split(':');
-    return +splitted[0] * 60 + +splitted[1];
+    let splitted : string[] =  time.split(':');
+    return Number(splitted[0]) * 60 + Number(splitted[1]);
   }
 
   minutesToHourMinute(minutes :number): string {
@@ -202,14 +204,14 @@ export class ChartComponent implements OnInit, AfterViewInit {
 
     let ret= [];
     let x;
-    const mean60 = mean/60;
-    const stddev60 = stddev/60;
+    const mean60:number = mean/60;
+    const stddev60:number = stddev/60;
     // console.log("mean60[" + mean60 + "] stddev60[" + stddev60 + "]");
     for (const labeltime of mlabel) {
       // console.log(labeltime);
-      let sec:number = labeltime.split(":",2);
+      let temp_sec:string[] = labeltime.split(":",2);
       // console.log(sec);
-      sec = +sec[0]*60 + +sec[1];
+      let sec:number = Number(temp_sec[0]) * 60 + Number(temp_sec[1]);
       x = this.pdf(sec, mean60, stddev60);
       // x = x * number_of_runners;
       // if (x < 0.1){
@@ -279,7 +281,14 @@ export class ChartComponent implements OnInit, AfterViewInit {
         // starta på kvarten innan första tid
         let labelstart = this.minutesToHourMinute(tempx*15);
         // sluta på kvarten efter sista tid
-        tempx = Math.trunc(stats['slowest_time_sec']/900)+1;
+        // sista tid får inte vara längre än 4xVinnartid
+        let slowest_temp = stats['slowest_time_sec'];
+
+        if (slowest_temp > (4*fastest_time_sec)){
+          slowest_temp = 4*fastest_time_sec;
+        }
+
+        tempx = Math.trunc(slowest_temp/900)+1;
         let labelend = this.minutesToHourMinute(tempx*15);
 
         this.chartLabels = [];

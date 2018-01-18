@@ -9,7 +9,7 @@ import { RaceService } from '../race.service';
 })
 export class RacesComponent implements OnInit {
   selectedRace: Race;
-//races: Race[];
+  races: any;
 
   constructor(private raceService: RaceService) { }
 

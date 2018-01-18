@@ -13,6 +13,8 @@ import { Checkpoint } from '../checkpoint';
 })
 
 export class RaceComponent implements OnInit {
+
+  checkpoints:any;
   selectedCheckpoint: Checkpoint;
   constructor(
     private route: ActivatedRoute,
@@ -39,39 +41,30 @@ export class RaceComponent implements OnInit {
     switch(alias) {
       case "fjallmara": {
         return "Fjällmaraton";
-        break;
       }
       case "27k": {
         return "Salomon 27K";
-        break;
       }
       case "oppet-fjall": {
         return "Öppet Fjäll";
-        break;
       }
       case "kvartsmara": {
         return "Kvartsmaraton";
-        break;
       }
       case "valliste": {
         return "Välliste Runt";
-        break;
       }
       case "copper-trail": {
         return "Copper Trail";
-        break;
       }
       case "verticalk": {
         return "Vertical K";
-        break;
       }
       case "bydalsfjallen22": {
         return "Bydalen Fjällmaraton 22K";
-        break;
       }
       case "bydalsfjallen50": {
         return "Bydalen Fjällmaraton 50K";
-        break;
       }
       default: {
         break;

@@ -464,13 +464,13 @@ if __name__ == '__main__':
     __TRUNCATE__ = 1
 
     __BYDALEN__ = 1
-    __27K__ = 0
-    __FJALLMARATON__ = 0
-    __KVARTSMARATON__ = 0
-    __VALLISTERUNT__ = 0
-    __COPPERTRAIL__ = 0
-    __VERTICALK__ = 0
-    __OPPETFJALL__ = 0
+    __27K__ = 1
+    __FJALLMARATON__ = 1
+    __KVARTSMARATON__ = 1
+    __VALLISTERUNT__ = 1
+    __COPPERTRAIL__ = 1
+    __VERTICALK__ = 1
+    __OPPETFJALL__ = 1
 
 
     if __TRUNCATE__ :

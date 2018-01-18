@@ -36,7 +36,7 @@ export class PassingService {
         console.error(error); // log to console instead
 
         // TODO: better job of transforming error for user consumption
-        this.log(`${operation} failed: ${error.message}`);
+        console.log(`${operation} failed: ${error.message}`);
 
         // Let the app keep running by returning an empty result.
         return of(result as T);
@@ -50,26 +50,18 @@ export class PassingService {
 
     var passingsUrl = 'http://localhost/fjellmara/backend_get_passings?race='+race+'&year='+year+'&checkpoint='+checkpoint;
 
-   return this.http.get<Passing[]>(passingsUrl);
-
-    if(year==2015){
-        return of(PASSINGS15);
-    } else if (year==2016) {
-      return of(PASSINGS16);
-    } else if (year==2017) {
-      return of(PASSINGS17);
-    }
+    return this.http.get<Passing[]>(passingsUrl);
   }
 
-  getStats(race:string, checkpoint:string): Observable<Passing[]> {
+  getStats(race:string, checkpoint:string): Observable<CheckpointStat[]> {
     this.messageService.add('PassingService: fetched stats');
     let fetchUrl = 'http://localhost/fjellmara/backend_get_checkpoint_stat.php?race='+race+'&checkpoint='+checkpoint;
-    return this.http.get<Stat>(fetchUrl);
+    return this.http.get<CheckpointStat[]>(fetchUrl);
   }
 
   getCheckpoints(race:string): Observable<Checkpoint[]> {
     this.messageService.add('PassingService: fetched checkpoints');
     let fetchUrl = 'http://localhost/fjellmara/backend_get_checkpoints.php?race='+race;
-    return this.http.get<Stat>(fetchUrl);
+    return this.http.get<Checkpoint[]>(fetchUrl);
   }
 }

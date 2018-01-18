@@ -5,7 +5,6 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Race, RaceEnum } from './race';
 import { MessageService } from './message.service';
-import { RACES, CHECKPOINTS_FJALLMARA } from './mock-races';
 import { catchError, map, tap } from 'rxjs/operators';
 
 const httpOptions = {
@@ -46,22 +45,13 @@ export class RaceService {
       console.error(error); // log to console instead
 
       // TODO: better job of transforming error for user consumption
-      this.log(`${operation} failed: ${error.message}`);
+      console.log(`${operation} failed: ${error.message}`);
 
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
   }
 
-  getCheckpoints(race: RaceEnum): Observable<Checkpoint[]> {
-    // this.messageService.add('RaceService: fetched checkpoint');
-    // if(race == FJALLMARA){
-    //   return of(CHECKPOINTS_FJALLMARA);
-    // }
-    // else if(race == S27K){
-    //   return of(CHECKPOINTS_27K);
-    // }
-  }
 
 
 
