@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Race } from '../race';
-import { RaceService } from '../race.service';
+import { DataService } from '../data.service';
 
 @Component({
   selector: 'app-races',
@@ -11,7 +11,7 @@ export class RacesComponent implements OnInit {
   selectedRace: Race;
   races: any;
 
-  constructor(private raceService: RaceService) { }
+  constructor(private dataService: DataService) { }
 
   ngOnInit() {
     this.getRaces();
@@ -22,7 +22,7 @@ export class RacesComponent implements OnInit {
   }
 
   getRaces(): void {
-    this.raceService.getRaces().subscribe(races => this.races = races);
+    this.dataService.getRaces().subscribe(races => this.races = races);
   }
 
 }

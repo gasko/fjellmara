@@ -7,7 +7,6 @@ import { AppComponent } from './app.component';
 import { RacesComponent } from './races/races.component';
 import { RaceDetailComponent } from './race-detail/race-detail.component';
 import { DataService } from './data.service';
-import { RaceService } from './race.service';
 import { MessagesComponent } from './messages/messages.component';
 import { MessageService } from './message.service';
 import { AppRoutingModule } from './app-routing.module';
@@ -35,7 +34,7 @@ import { CapitalizefirstPipe } from './capitalizefirst.pipe';
     HttpClientModule
   ],
 
-  providers: [DataService, RaceService, MessageService],
+  providers: [DataService, MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

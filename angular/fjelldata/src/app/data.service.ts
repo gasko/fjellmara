@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Passing } from './passing';
+import { Race } from '/.race';
 import { Checkpoint } from './checkpoint';
 import { CheckpointStat } from './checkpointStat';
 import { MessageService } from './message.service';
@@ -44,13 +45,17 @@ export class DataService {
     }
 
 
+  getRaces(): Observable<Race[]> {
+    this.messageService.add('DataService: fetched races');
+    var fetchUrl = 'http://localhost/fjellmara/backend_get_races.php';
+    return this.http.get<Race[]>(fetchUrl);
+  //  return this.http.get("http://localhost/fjellmara/backend_get_races.php").map((response:Response) => response.json());
+  }
+
   getPassings(race:string, checkpoint:string, year:number): Observable<Passing[]> {
     this.messageService.add('DataService: fetched passings');
-    console.log(year);
-
-    var passingsUrl = 'http://localhost/fjellmara/backend_get_passings?race='+race+'&year='+year+'&checkpoint='+checkpoint;
-
-    return this.http.get<Passing[]>(passingsUrl);
+    var fetchUrl = 'http://localhost/fjellmara/backend_get_passings?race='+race+'&year='+year+'&checkpoint='+checkpoint;
+    return this.http.get<Passing[]>(fetchUrl);
   }
 
   getStats(race:string, checkpoint:string): Observable<CheckpointStat> {

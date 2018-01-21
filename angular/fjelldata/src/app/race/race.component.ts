@@ -4,8 +4,6 @@ import { Location } from '@angular/common';
 import { DataService } from '../data.service';
 import { Checkpoint } from '../checkpoint';
 
-//import { raceService }  from '../race.service';
-
 @Component({
   selector: 'app-race',
   templateUrl: './race.component.html',
@@ -19,8 +17,6 @@ export class RaceComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private dataService: DataService,
-    //private raceService: RaceService,
-    //private location: Location
   ) {
 
   route.params.subscribe(val => {
