@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { PassingService } from '../passing.service';
+import { DataService } from '../data.service';
 import { Checkpoint } from '../checkpoint';
 
 //import { raceService }  from '../race.service';
@@ -18,7 +18,7 @@ export class RaceComponent implements OnInit {
   selectedCheckpoint: string;
   constructor(
     private route: ActivatedRoute,
-    private passingService: PassingService,
+    private dataService: DataService,
     //private raceService: RaceService,
     //private location: Location
   ) {
@@ -83,7 +83,7 @@ export class RaceComponent implements OnInit {
   }
 
   fetchCheckpoints(race:string) {
-    this.passingService.getCheckpoints(race).subscribe(checkpoints =>
+    this.dataService.getCheckpoints(race).subscribe(checkpoints =>
       {
         console.log(checkpoints);
         let temp: Checkpoint[] = [];

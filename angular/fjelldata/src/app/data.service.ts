@@ -15,7 +15,7 @@ const httpOptions = {
 };
 
 @Injectable()
-export class PassingService {
+export class DataService {
 
 
 
@@ -45,7 +45,7 @@ export class PassingService {
 
 
   getPassings(race:string, checkpoint:string, year:number): Observable<Passing[]> {
-    this.messageService.add('PassingService: fetched passings');
+    this.messageService.add('DataService: fetched passings');
     console.log(year);
 
     var passingsUrl = 'http://localhost/fjellmara/backend_get_passings?race='+race+'&year='+year+'&checkpoint='+checkpoint;
@@ -54,13 +54,13 @@ export class PassingService {
   }
 
   getStats(race:string, checkpoint:string): Observable<CheckpointStat> {
-    this.messageService.add('PassingService: fetched stats');
+    this.messageService.add('DataService: fetched stats');
     let fetchUrl = 'http://localhost/fjellmara/backend_get_checkpoint_stat.php?race='+race+'&checkpoint='+checkpoint;
     return this.http.get<CheckpointStat>(fetchUrl);
   }
 
   getCheckpoints(race:string): Observable<Checkpoint[]> {
-    this.messageService.add('PassingService: fetched checkpoints');
+    this.messageService.add('DataService: fetched checkpoints');
     let fetchUrl = 'http://localhost/fjellmara/backend_get_checkpoints.php?race='+race;
     return this.http.get<Checkpoint[]>(fetchUrl);
   }

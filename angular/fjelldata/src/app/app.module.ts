@@ -4,10 +4,9 @@ import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
-import { RunnersComponent } from './runners/runners.component';
 import { RacesComponent } from './races/races.component';
 import { RaceDetailComponent } from './race-detail/race-detail.component';
-import { PassingService } from './passing.service';
+import { DataService } from './data.service';
 import { RaceService } from './race.service';
 import { MessagesComponent } from './messages/messages.component';
 import { MessageService } from './message.service';
@@ -21,7 +20,6 @@ import { CapitalizefirstPipe } from './capitalizefirst.pipe';
 @NgModule({
   declarations: [
     AppComponent,
-    RunnersComponent,
     RacesComponent,
     RaceDetailComponent,
     MessagesComponent,
@@ -37,7 +35,7 @@ import { CapitalizefirstPipe } from './capitalizefirst.pipe';
     HttpClientModule
   ],
 
-  providers: [PassingService, RaceService, MessageService],
+  providers: [DataService, RaceService, MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

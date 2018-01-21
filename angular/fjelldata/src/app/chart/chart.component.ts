@@ -4,7 +4,7 @@ import { ChartsModule } from 'ng2-charts';
 import { Passing } from '../passing';
 import { Runner } from '../runner';
 import { CheckpointStat } from '../checkpointStat';
-import { PassingService } from '../passing.service';
+import { DataService } from '../data.service';
 
 @Component({
   selector: 'app-chart',
@@ -99,7 +99,7 @@ export class ChartComponent implements OnInit, AfterViewInit {
   };
 
   constructor(
-    private passingService: PassingService,
+    private dataService: DataService,
     private route: ActivatedRoute
   ) {
     route.params.subscribe(val => {
@@ -236,7 +236,7 @@ export class ChartComponent implements OnInit, AfterViewInit {
   }
 
   fetchStats(race:string, checkpoint:string) {
-    this.passingService.getStats(race,checkpoint).subscribe(stats =>
+    this.dataService.getStats(race,checkpoint).subscribe(stats =>
       {
         this.rr = stats;
 
@@ -273,16 +273,5 @@ export class ChartComponent implements OnInit, AfterViewInit {
         // console.log("dataNormal" + this.dataPassings);
       });
   }
-
-  // fetchPassings(race:string, checkpoint:string, year:number) {
-  //   this.passingService.getPassings(race,checkpoint,year).subscribe(passings =>
-  //     {
-  //       let checkpassings = passings;
-  //       this.ret= [];
-  //       this.ret = this.getLabelSerie(this.label, passings);
-  //     });
-  // }
-
-
 
 }
