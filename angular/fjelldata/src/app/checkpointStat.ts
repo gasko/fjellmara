@@ -14,5 +14,6 @@ export class CheckpointStat {
   avg_time: string;
   avg_time_sec: number;
   numberofraces: number;
+  years: number[];
   passings:Passing[];
 }

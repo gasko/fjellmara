@@ -1,13 +1,37 @@
-<ul *ngIf="rr" class="statlist">
-  <li><div class="label">Antal löpare:</div> {{rr.tot_runners}} </li>
-  <li><div class="label">Snabbaste man:</div> {{rr.fastest_runners_m[0].time}} - {{rr.fastest_runners_m[0].firstname}} {{rr.fastest_runners_m[0].surname}} ({{rr.fastest_runners_m[0].year}}) <div *ngIf="rr.fastest_runners_m[0].nation2" class="flag" [ngStyle]="{'background-image': 'url(/assets/flags/'+rr.fastest_runners_m[0].nation2.toLowerCase() +'.svg)'}"></div>{{rr.fastest_runners_m[0].club}}</li>
-  <li><div class="label">Snabbaste man:</div> {{rr.fastest_runners_f[0].time}} - {{rr.fastest_runners_f[0].firstname}} {{rr.fastest_runners_f[0].surname}} ({{rr.fastest_runners_f[0].year}}) <div *ngIf="rr.fastest_runners_m[0].nation2" class="flag" [ngStyle]="{'background-image': 'url(/assets/flags/'+rr.fastest_runners_f[0].nation2.toLowerCase() +'.svg)'}"></div>{{rr.fastest_runners_f[0].club}}</li>
-  <li><div class="label">medeltid:</div> {{rr.avg_time}}</li>
-  <li><div class="label">Långsammaste tid:</div> {{rr.slowest_time}}</li>
-  <li *ngFor="let runner of rr.fastest_runners_m">
-    <div class="label">Snabbaste man:</div> {{runner.time}} - {{runner.firstname}} {{runner.surname}} ({{runner.year}}) <div *ngIf="runner.nation2"class="flag" [ngStyle]="{'background-image': 'url(/assets/flags/'+runner.nation2.toLowerCase() +'.svg)'}"></div>{{runner.club}}
-  </li>
-</ul>
+
+<div class="yearlist" *ngIf="rr" >
+  Data från år:
+  <ul *ngIf="rr">
+    <li *ngFor="let year of rr.years">
+      {{year}},
+    </li>
+  </ul>
+antal löpare: {{rr.tot_runners}}
+</div>
+<div class="statlist">
+  <ul *ngIf="rr" >
+
+    <li><div class="label">Snabbaste tid:</div> {{rr.fastest_time}}</li>
+    <li><div class="label">medeltid:</div> {{rr.avg_time}}</li>
+    <li><div class="label">Långsammaste tid:</div> {{rr.slowest_time}}</li>
+    <li *ngFor="let runner of rr.fastest_runners_m; index as i; first as isFirst" [class.first]="isFirst === true" [class.rest]="i >= 1">
+      <div class="label">&nbsp;<span *ngIf="isFirst">Snabbaste män:</span></div>
+      <div class="data">
+        {{runner.time}} - {{runner.firstname | capitalizefirst}} {{runner.surname | capitalizefirst}} ({{runner.year}})
+        <div *ngIf="runner.nation2"class="flag" [ngStyle]="{'background-image': 'url(/assets/flags/'+runner.nation2.toLowerCase() +'.svg)'}"></div>
+        <!--{{runner.club}}-->
+      </div>
+    </li>
+    <li *ngFor="let runner of rr.fastest_runners_f; index as i; first as isFirst" [class.first]="isFirst === true" [class.rest]="i >= 1">
+      <div class="label">&nbsp;<span *ngIf="isFirst">Snabbaste kvinnor:</span></div>
+      <div class="data">
+        {{runner.time}} - {{runner.firstname | capitalizefirst}} {{runner.surname | capitalizefirst}} ({{runner.year}})
+        <div *ngIf="runner.nation2"class="flag" [ngStyle]="{'background-image': 'url(/assets/flags/'+runner.nation2.toLowerCase() +'.svg)'}"></div>
+        <!--{{runner.club}}-->
+      </div>
+    </li>
+  </ul>
+</div>
 
 <div class="racechart" style="width: 100%;">
   <canvas

@@ -29,6 +29,8 @@ export class ChartComponent implements OnInit, AfterViewInit {
   dataNormal: number[] = [];
   ret:number[] = [];
 
+
+
   public lineChartColors:Array<any> = [
     { // grey
       backgroundColor: 'rgba(148,159,177,0.2)',
@@ -132,9 +134,6 @@ export class ChartComponent implements OnInit, AfterViewInit {
   }
 
   getAlias(): string {
-    // console.log(this.alias);
-    // console.log(this.route.snapshot.paramMap.keys);
-    // console.log(+this.route.snapshot.paramMap.get Keys);
     return this.route.snapshot.paramMap.get('alias');
   }
   getCAlias(): string {
@@ -261,14 +260,15 @@ export class ChartComponent implements OnInit, AfterViewInit {
         this.chartLabels = [];
         this.chartLabels = this.createLabels(labelstart,labelend);
         let tempNormal:number[] = this.createPdfSerie(this.chartLabels, stats.avg_time_sec, stats.stddev_sec);
+        let numberofraces:number = stats.years.length;
         for (const x of tempNormal){
-          this.dataNormal.push(x * stats.tot_runners / stats.numberofraces);
+          this.dataNormal.push(x * stats.tot_runners / numberofraces);
         }
 
         //let pass:Passing[] = stats['passings'];
         let tempPassings = this.getLabelSerie(this.chartLabels, stats.passings);
         for (const x of tempPassings){
-          this.dataPassings.push(x / this.labelminutes / stats.numberofraces);// == 0 ? x : x/5
+          this.dataPassings.push(x / this.labelminutes / numberofraces);// == 0 ? x : x/5
         }
         // console.log("dataNormal" + this.dataPassings);
       });

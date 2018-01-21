@@ -2,26 +2,58 @@
 
 }
 
-ul {
+.yearlist {
+  font-size: 0.7em;
   color: white;
+  margin-top: 1em;
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+}
+
+.yearlist ul{
+  display: inline;
   list-style-type: none;
   padding-left: 0;
 }
 
-li {
+.yearlist li {
+  position: relative;
+  display: inline;
+  left: 0;
+}
+
+.statlist ul {
+  color: white;
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 0;
+}
+
+.statlist li {
   position: relative;
   left: 0;
   background-color: #333;
-   background: linear-gradient(to right, #333 , rgb(25,25,25));
+  background: linear-gradient(to right, #333 , rgb(25,25,25));
   margin: 1px 0;
   padding: .3em 0 0.3em;
   height: 1.6em;
   width: 540px;
   border-radius: 4px;
-
+  font-size: 1em;
 }
 
-.label {
+/* .statlist li .first {
+  margin: 1px 0 0 0 !important;
+}
+
+.statlist li.rest {
+  font-size: 0.8em;
+  padding-bottom: 0.8em;
+  margin: 0;
+} */
+
+.statlist .label {
   display: inline-block;
   text-align: right;
   font-size: small;
@@ -39,7 +71,18 @@ li {
   border-radius: 4px 0 0 4px;
 }
 
-.flag {
+.statlist .data {
+  display: inline-block;
+  text-align: right;
+  font-size: small;
+  padding: 0.8em 0.7em 0 0.7em;
+  line-height: 1em;
+  position: relative;
+  border-radius: 4px 0 0 4px;
+}
+
+
+.statlist .flag {
   display: inline-block;
   height: .9em;
   width: 1.2em;
