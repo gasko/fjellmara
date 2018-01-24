@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { DataService } from '../data.service';
 import { Checkpoint } from '../checkpoint';
+import { AppGlobals } from '../app.global';
 
 @Component({
   selector: 'app-race',
@@ -14,16 +15,17 @@ export class RaceComponent implements OnInit {
 
   checkpoints:any;
   selectedCheckpoint: string;
+  logopath:string = "";
   constructor(
     private route: ActivatedRoute,
-    private dataService: DataService,
-  ) {
-
+    private dataService: DataService)
+  {
+  this.logopath = AppGlobals.DEPLOY_PATH;
   route.params.subscribe(val => {
     this.alias = this.getAlias();
     this.race = this.getRaceName();
     this.fetchCheckpoints(this.alias);
-});
+  });
 }
   alias: string;
   race: string;

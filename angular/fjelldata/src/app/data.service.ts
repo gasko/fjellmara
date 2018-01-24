@@ -4,12 +4,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Passing } from './passing';
-import { Race } from '/.race';
+import { Race } from './race';
 import { Checkpoint } from './checkpoint';
 import { CheckpointStat } from './checkpointStat';
 import { MessageService } from './message.service';
 import { PASSINGS17, PASSINGS16, PASSINGS15 } from './mock-passing';
 import { catchError, map, tap } from 'rxjs/operators';
+import { AppGlobals } from './app.global';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -18,11 +19,14 @@ const httpOptions = {
 @Injectable()
 export class DataService {
 
-
+  phpPath:string = "";
 
   constructor(
     private messageService: MessageService,
-    private http: HttpClient) { }
+    private http: HttpClient)
+    {
+      this.phpPath = AppGlobals.PHP_PATH;
+    }
 
     /**
      * Handle Http operation that failed.
@@ -47,26 +51,26 @@ export class DataService {
 
   getRaces(): Observable<Race[]> {
     this.messageService.add('DataService: fetched races');
-    var fetchUrl = 'http://localhost/fjellmara/backend_get_races.php';
+    var fetchUrl = this.phpPath + 'backend_get_races.php';
     return this.http.get<Race[]>(fetchUrl);
   //  return this.http.get("http://localhost/fjellmara/backend_get_races.php").map((response:Response) => response.json());
   }
 
   getPassings(race:string, checkpoint:string, year:number): Observable<Passing[]> {
     this.messageService.add('DataService: fetched passings');
-    var fetchUrl = 'http://localhost/fjellmara/backend_get_passings?race='+race+'&year='+year+'&checkpoint='+checkpoint;
+    var fetchUrl = this.phpPath + 'backend_get_passings?race='+race+'&year='+year+'&checkpoint='+checkpoint;
     return this.http.get<Passing[]>(fetchUrl);
   }
 
   getStats(race:string, checkpoint:string): Observable<CheckpointStat> {
     this.messageService.add('DataService: fetched stats');
-    let fetchUrl = 'http://localhost/fjellmara/backend_get_checkpoint_stat.php?race='+race+'&checkpoint='+checkpoint;
+    let fetchUrl = this.phpPath + 'backend_get_checkpoint_stat.php?race='+race+'&checkpoint='+checkpoint;
     return this.http.get<CheckpointStat>(fetchUrl);
   }
 
   getCheckpoints(race:string): Observable<Checkpoint[]> {
     this.messageService.add('DataService: fetched checkpoints');
-    let fetchUrl = 'http://localhost/fjellmara/backend_get_checkpoints.php?race='+race;
+    let fetchUrl = this.phpPath + 'backend_get_checkpoints.php?race='+race;
     return this.http.get<Checkpoint[]>(fetchUrl);
   }
 }

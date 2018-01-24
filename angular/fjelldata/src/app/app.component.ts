@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem, RACE_MENU } from './menuitem';
+import { AppGlobals } from './app.global';
 
 @Component({
   selector: 'app-root',
@@ -8,13 +9,19 @@ import { MenuItem, RACE_MENU } from './menuitem';
 })
 
 export class AppComponent implements OnInit {
+  deploy_path:string = "";
+  constructor() {
+    this.deploy_path = AppGlobals.DEPLOY_PATH;
+  }
 
   menuitems:MenuItem[] = RACE_MENU;
 
   selectedRace:string = 'home';
 
+
+
   ngOnInit(): void {
-    // this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = 'yourColor';
+
   }
 
   onSelect(race:string): void {

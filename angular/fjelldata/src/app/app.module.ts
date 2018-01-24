@@ -9,12 +9,12 @@ import { RaceDetailComponent } from './race-detail/race-detail.component';
 import { DataService } from './data.service';
 import { MessagesComponent } from './messages/messages.component';
 import { MessageService } from './message.service';
+import { AppGlobals } from './app.global';
 import { AppRoutingModule } from './app-routing.module';
 import { ChartComponent } from './chart/chart.component';
 import { ChartsModule } from 'ng2-charts';
 import { RaceComponent } from './race/race.component';
 import { CapitalizefirstPipe } from './capitalizefirst.pipe';
-
 
 @NgModule({
   declarations: [
@@ -34,7 +34,7 @@ import { CapitalizefirstPipe } from './capitalizefirst.pipe';
     HttpClientModule
   ],
 
-  providers: [DataService, MessageService],
+  providers: [DataService, MessageService, AppGlobals],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
