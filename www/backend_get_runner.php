@@ -1,30 +1,7 @@
 <?php
 header("Content-Type:application/json");
 header("Access-Control-Allow-Origin: *");
-$conn = mysqli_connect("localhost", "root", "", "fjelldata");
-/* change character set to utf8 */
-$conn->set_charset("utf8");
-
-$race = "Fjällmaraton";
-if (isset($_GET['race'])){
-    $race = $_GET['race'];
-    if ($race == "fjallmara") {
-      $race = "Fjällmaraton";
-    }
-}
-
-$year = 2017;
-if (isset($_GET['year'])){
-    $year = $_GET['year'];
-}
-
-$checkpoint = "Hållfjället";
-if (isset($_GET['checkpoint'])){
-    $checkpoint = $_GET['checkpoint'];
-    if ($checkpoint == "hallfjallet") {
-      $checkpoint = "Hållfjället";
-    }
-}
+require_once '_db.php';
 
 //need to add safety.. must be number >0
 $bib = 100;

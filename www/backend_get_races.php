@@ -1,9 +1,7 @@
 <?php
 header("Content-Type:application/json");
 header("Access-Control-Allow-Origin: *");
-$conn = mysqli_connect("localhost", "root", "", "fjelldata");
-/* change character set to utf8 */
-$conn->set_charset("utf8");
+require_once '_db.php';
 
 $output = array();
 $query = "SELECT DISTINCT race AS name, year FROM results";
