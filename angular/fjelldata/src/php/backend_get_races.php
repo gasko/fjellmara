@@ -1,5 +1,4 @@
 <?php
-//§12
 header("Content-Type:application/json");
 header("Access-Control-Allow-Origin: *");
 require_once '_db.php';

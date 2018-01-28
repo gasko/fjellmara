@@ -1,8 +1,6 @@
 <?php
-//§12
 header("Content-Type:application/json");
-header("Access-Control-Allow-Origin: *");//§12
-
+header("Access-Control-Allow-Origin: *");
 require_once '_db.php';
 //need to add safety.. must be number >0
 $time_in_sec = 300;

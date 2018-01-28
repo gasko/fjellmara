@@ -74,8 +74,8 @@ export class RaceComponent implements OnInit {
 }
   }
   getAlias(): string {
-    console.log(this.alias);
-    console.log(this.route.snapshot.paramMap.keys);
+    // console.log(this.alias);
+    // console.log(this.route.snapshot.paramMap.keys);
     // console.log(+this.route.snapshot.paramMap.get Keys);
     return this.route.snapshot.paramMap.get('alias');
   }
@@ -83,7 +83,7 @@ export class RaceComponent implements OnInit {
   fetchCheckpoints(race:string) {
     this.dataService.getCheckpoints(race).subscribe(checkpoints =>
       {
-        console.log(checkpoints);
+        // console.log(checkpoints);
         let temp: Checkpoint[] = [];
         for (let checkpoint of checkpoints){
           if(checkpoint.name == "start" || checkpoint.name == "pre finnish"){

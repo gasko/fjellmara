@@ -73,4 +73,10 @@ export class DataService {
     let fetchUrl = this.phpPath + 'backend_get_checkpoints.php?race='+race;
     return this.http.get<Checkpoint[]>(fetchUrl);
   }
+
+  getRunner(race:string, year:number, bib:number): Observable<RunnerExt> {
+    this.messageService.add('DataService: fetched runner');
+    let fetchUrl = this.phpPath + 'backend_get_runner.php?race='+race+'&year='+year+'&bib='+bib;
+    return this.http.get<RunnerExt>(fetchUrl);
+  }
 }

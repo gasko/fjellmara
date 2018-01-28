@@ -3,12 +3,16 @@ import { RouterModule, Routes } from '@angular/router';
 import { RacesComponent }      from './races/races.component';
 import { RaceComponent }  from './race/race.component';
 import { ChartComponent } from './chart/chart.component';
+import { AppGlobals } from './app.global';
+import { RunnerDetailComponent } from './runner-detail/runner-detail.component';
+
 
 const routes: Routes = [
   { path: 'races', component: RacesComponent },
   { path: 'chart', component: ChartComponent },
   { path: 'race/:alias', component: RaceComponent },
-  { path: 'race/:alias/:c_alias', component: RaceComponent }
+  { path: 'race/:alias/:c_alias', component: RaceComponent },
+  { path: 'runner/:race/:year/:bib', component: RunnerDetailComponent }
 ];
 
 @NgModule({

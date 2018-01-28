@@ -4,7 +4,7 @@
 
 <nav>
   <ul class="nav">
-    <li [class.selected]="'home' === selectedRace" (click)="onSelect('home')"><a routerLink="/races">hem</a></li>
+    <li [class.selected]="'home' === selectedRace" (click)="onSelect('home')"><a routerLink="/runner/fjallmara/2017/100">hem</a></li>
     <li *ngFor="let item of menuitems" [class]="'sponsor-' + item.alias" [class.selected]="item.alias === selectedCheckpoint" (click)="onSelect(item.alias)">
       <a routerLink="{{deploy_path}}/race/{{item.alias}}">{{item.name}}</a>
     </li>

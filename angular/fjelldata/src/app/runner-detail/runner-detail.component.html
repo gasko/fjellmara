@@ -1,0 +1,21 @@
+<div *ngIf="runner">
+  <div class='bib'>{{runner.bib}}</div> {{runner.firstname}} {{runner.surname}} <br/>
+  {{runner.gender}} - {{runner.class}} <br/>
+  {{runner.birthdate}}
+  {{runner.club}} <br />
+  {{runner.nation.name}} [{{runner.nation.code2}}] [{{runner.nation.code3}}]<br />
+  {{runner.time}}<br />
+<ul>
+  <li *ngFor="let checkpoint of runner.checkpoints">
+    CP: {{checkpoint.name}}
+    time[{{checkpoint.timepassed.inFormat}}]-
+    [{{checkpoint.timeofday}}]
+    {{checkpoint.cpOrder}}
+    pos: all[{{checkpoint.position.all}}]
+    gender[{{checkpoint.position.gender}}]
+    class[{{checkpoint.position.class}}]
+  </li>
+
+</ul>
+</div>
+  runner-detail works!

@@ -15,7 +15,7 @@ export class CapitalizefirstPipe implements PipeTransform {
       return '';
     }
     input = input.toLowerCase();
-    console.log(input);
+    // console.log(input);
     return input.replace(/(^|[\s-])\S/g, function (match) {
       return match.toUpperCase();
     });

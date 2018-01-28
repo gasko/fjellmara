@@ -1,8 +1,8 @@
 <?php
-// header("Content-Type:application/json");
-// header("Access-Control-Allow-Origin: *");
-$conn = mysqli_connect("localhost", "root", "", "fjelldata");
-//$conn = mysqli_connect("monoski.se.mysql", "monoski_se", "NbKrcVJe", "monoski_se");
+header("Content-Type:application/json");
+header("Access-Control-Allow-Origin: *");
+//$conn = mysqli_connect("localhost", "root", "", "fjelldata");
+$conn = mysqli_connect("monoski.se.mysql", "monoski_se", "NbKrcVJe", "monoski_se");
 /* change character set to utf8 */
 $conn->set_charset("utf8");
 
@@ -67,15 +67,5 @@ if (isset($_GET['checkpoint'])){
     if ($checkpoint == "hallfjallet") {
       $checkpoint = "Hållfjället";
     }
-}
-
-
-function sec2time($seconds){
-  return gmdate("H:i:s", (int)$seconds);
-}
-
-function time2sec($time /* HH:MM:SS */){
-  list($hour_, $minute_, $second_) = explode(':', $time);
-  return ($hour_ * 3600) + ($minute_ * 60) + $second_;
 }
 ?>

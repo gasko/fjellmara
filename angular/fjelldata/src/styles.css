@@ -1,8 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
-/* $flag-icon-css-path: '../../../../flag-icon-css/flags' !default;
-@import "../../../../flag-icon-css/sass/flag-icon"; */
+
 
 body {
   background-color: rgb(25,25,25);
   font-family: "Lato", sans-serif;
+  color: #FFF;
 }

@@ -113,13 +113,13 @@ export class ChartComponent implements OnInit, AfterViewInit {
         { data: this.dataPassings, label: 'Passeringar', pointRadius: 0},
         { data: this.dataNormal, label: 'Normalfördelning', pointRadius: 0},
       ];
-      console.log(race);
+      // console.log(race);
       this.fetchStats(race,checkpoint);
   });
   }
 
   onChartClick(event) {
-    console.log(event);
+    // console.log(event);
   }
 
   ngOnInit() {
@@ -127,10 +127,6 @@ export class ChartComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // this.chartData = [
-    //   { data: this.dataNormal, label: 'test'},
-    //   { data: this.dataPassings, label: 'test1'},
-    // ];
   }
 
   getAlias(): string {
@@ -231,7 +227,6 @@ export class ChartComponent implements OnInit, AfterViewInit {
         ret.push(0);
       }
     }
-    // console.log("ret[" + ret + "]");
     return ret;
   }
 
@@ -265,12 +260,10 @@ export class ChartComponent implements OnInit, AfterViewInit {
           this.dataNormal.push(x * stats.tot_runners / numberofraces);
         }
 
-        //let pass:Passing[] = stats['passings'];
         let tempPassings = this.getLabelSerie(this.chartLabels, stats.passings);
         for (const x of tempPassings){
           this.dataPassings.push(x / this.labelminutes / numberofraces);// == 0 ? x : x/5
         }
-        // console.log("dataNormal" + this.dataPassings);
       });
   }
 
