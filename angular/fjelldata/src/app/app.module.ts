@@ -16,6 +16,7 @@ import { ChartsModule } from 'ng2-charts';
 import { RaceComponent } from './race/race.component';
 import { CapitalizefirstPipe } from './capitalizefirst.pipe';
 import { RunnerDetailComponent } from './runner-detail/runner-detail.component';
+import { RunnerFindComponent } from './runner-find/runner-find.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { RunnerDetailComponent } from './runner-detail/runner-detail.component';
     ChartComponent,
     RaceComponent,
     CapitalizefirstPipe,
-    RunnerDetailComponent
+    RunnerDetailComponent,
+    RunnerFindComponent
   ],
   imports: [
     BrowserModule,

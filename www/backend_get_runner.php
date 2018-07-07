@@ -71,7 +71,7 @@ $query =
             co.code AS nation_code2,
             co.countrycode AS nation_code3,
             co.countryname AS nation_name,
-            r.birthdate AS birthdate,
+            YEAR(r.birthdate) AS birthyear,
             r.club AS club,
             r.race AS race,
             r.year AS year,
@@ -113,12 +113,32 @@ $query =
 
 $sth = mysqli_query($conn, $query);
 $rows = array();
+$tempAll = null;
+$tempGender = null;
+$tempClass = null;
 while($cp = mysqli_fetch_assoc($sth)) {
   $position['all'] = getRunnerPosition($conn, $race, $year, $cp['name'], $cp['timepassed_sec'], NULL, NULL);
+  if(!is_null($tempAll)){
+    $position['allDiff'] = $position['all'] - $tempAll;
+  } else {
+    $position['allDiff'] = 0;
+  }
   $position['gender'] = getRunnerPosition($conn, $race, $year, $cp['name'], $cp['timepassed_sec'], $gender, NULL);
+  if(!is_null($tempGender)){
+    $position['genderDiff'] = $position['gender'] - $tempGender;
+  } else {
+    $position['genderDiff'] = 0;
+  }
   $position['class'] = getRunnerPosition($conn, $race, $year, $cp['name'], $cp['timepassed_sec'], NULL,  $class);
+  if(!is_null($tempClass)){
+    $position['classDiff'] = $position['class'] - $tempClass;
+  } else {
+    $position['classDiff'] = 0;
+  }
   $cp['position']=$position;
-
+  $tempAll = $position['all'];
+  $tempGender = $position['gender'];
+  $tempClass = $position['class'];
   $timepassed['inFormat']=$cp['timepassed'];
   $timepassed['inSec']=$cp['timepassed_sec'];
   unset($cp['timepassed']);

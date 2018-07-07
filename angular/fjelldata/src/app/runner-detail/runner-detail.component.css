@@ -1,0 +1,76 @@
+ul.cptable {
+  list-style: none outside none;
+  padding: 0;
+}
+
+.cptable li {
+  float:left;
+  clear:left;
+}
+
+.cptable .checkpoint {
+  float: left;
+  display: block;
+  width: 200px;
+  height: 40px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #AAA;
+  text-align: right;
+}
+
+.cptable .timecell {
+  float: left;
+  display: block;
+  width: 100px;
+  height: 40px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #AAA;
+  text-align: center;
+}
+
+.name {
+  display: inline-block;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 4px;
+  border-color: #DDD;
+  padding: 2px 1em 2px 2px;
+}
+
+.name .bib {
+  font-family: 'VT323', cursive;
+  font-size: 1.3em;
+  font-weight: bold;
+  display: inline-block;
+  /* font-size: small; */
+  color: black;
+  padding: 0.5em 0.5em 0 0.5em;
+  background-color: #DDD;
+  line-height: 1em;
+  position: relative;
+  left: -1px;
+  top: 0px;
+  height: 1.5em;
+  margin-right: .8em;
+  border-radius: 4px;
+}
+
+.arrow-up {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+
+  border-bottom: 5px solid GREEN;
+}
+
+.arrow-down {
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+
+  border-top: 20px solid RED;
+}

@@ -8,7 +8,7 @@ export class RunnerExt {
   surname: string;
   gender: string;
   nation: Nation;
-  birthdate: string;
+  birthyear: string;
   time: string;
   year: number;
   club: string;

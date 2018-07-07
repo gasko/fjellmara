@@ -17,7 +17,7 @@ export class RunnerDetailComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log("race: " + this.getUrlRace() "   year: " + this.getUrlYear() + "   bib: " + this.getUrlBib());
+    console.log("race: " + this.getUrlRace() + "   year: " + this.getUrlYear() + "   bib: " + this.getUrlBib());
     this.fetchRunner(this.getUrlRace(), this.getUrlYear(), this.getUrlBib());
   }
 
@@ -32,8 +32,35 @@ export class RunnerDetailComponent implements OnInit {
   getUrlBib(): string {
     return this.route.snapshot.paramMap.get('bib');
   }
+
+
   fetchRunner(race:string, year:number, bib:number): void {
-    this.dataService.getRunner(race, year, bib).subscribe(runner => this.runner = runner);
+    let allTemp:number;
+    this.dataService.getRunner(race, year, bib).subscribe(runner => {
+      let genderTemp:number;
+      let classTemp:number;
+      // for (let checkpoint of runner.checkpoints) {
+      //   console.log(allTemp);
+      //   if (allTemp){
+      //     checkpoint.position.allDiff = allTemp - checkpoint.position.all;
+      //     console.log(checkpoint);
+      //   }
+      //   if (genderTemp){
+      //     checkpoint.position.genderDiff = genderTemp - checkpoint.position.gender;
+      //   }
+      //   if (classTemp){
+      //     checkpoint.position.classDiff = classTemp - checkpoint.position.class;
+      //   }
+      // }
+      //   console.log(checkpoint.position.all);
+      // allTemp = checkpoint.position.all;
+      //   console.log(allTemp);
+      // genderTemp = checkpoint.position.gender;
+      // classTemp = checkpoint.position.class;
+      this.runner = runner;
+      console.log(this.runner);
+    });
+
   }
 
 

@@ -79,4 +79,10 @@ export class DataService {
     let fetchUrl = this.phpPath + 'backend_get_runner.php?race='+race+'&year='+year+'&bib='+bib;
     return this.http.get<RunnerExt>(fetchUrl);
   }
+
+  getRunners(races:string[], years:number[], firstname:string, surname:string, bib:number): Observable<any> {
+      this.messageService.add('DataService: fetched');
+      let fethurl = this.phpPath + 'backend_get_runners.php?&years=('+year+')&firstname='+firstname'+&surname='+surname+'&bib='bib';
+  }
+
 }

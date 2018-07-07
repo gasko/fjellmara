@@ -1,19 +1,27 @@
 <div *ngIf="runner">
-  <div class='bib'>{{runner.bib}}</div> {{runner.firstname}} {{runner.surname}} <br/>
-  {{runner.gender}} - {{runner.class}} <br/>
-  {{runner.birthdate}}
-  {{runner.club}} <br />
-  {{runner.nation.name}} [{{runner.nation.code2}}] [{{runner.nation.code3}}]<br />
+  {{runner.race}} {{runner.year}} <br />
+  <div class='name'>
+    <div class='bib'>{{runner.bib}}</div> {{runner.firstname}} {{runner.surname}}
+  </div>
+  Födelseår: {{runner.birthyear}}<br/>
+  Klubb: {{runner.club}} <br/>
+  Nation: {{runner.nation.name}} <br/>
+  Klass: {{runner.class}} <br/>
+
   {{runner.time}}<br />
-<ul>
+
+<ul class='cptable'>
+  <li>
+    <div class='checkpoint'></div>
+    <div class='timecell'>Alla</div>
+    <div class='timecell'>{{runner.class}}</div>
+  </li>
   <li *ngFor="let checkpoint of runner.checkpoints">
-    CP: {{checkpoint.name}}
-    time[{{checkpoint.timepassed.inFormat}}]-
-    [{{checkpoint.timeofday}}]
-    {{checkpoint.cpOrder}}
-    pos: all[{{checkpoint.position.all}}]
-    gender[{{checkpoint.position.gender}}]
-    class[{{checkpoint.position.class}}]
+    <div class='checkpoint'>{{checkpoint.name}}</div>
+    <div class='timecell'>{{checkpoint.position.all}}</div>
+    <div class='timecell'>{{checkpoint.position.class}}</div>
+    <!-- time[{{checkpoint.timepassed.inFormat}}]-
+    [{{checkpoint.timeofday}}] -->
   </li>
 
 </ul>
